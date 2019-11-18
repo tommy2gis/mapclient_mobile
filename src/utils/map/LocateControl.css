@@ -1,0 +1,35 @@
+
+.leaflet-control-locate{
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
+}
+.leaflet-control-locate a {
+    font-size: 1.4em;
+    color: #444;
+    cursor: pointer;
+  }
+  .leaflet-control-locate.active a {
+    color: #2074B6;
+  }
+  .leaflet-control-locate.active.following a {
+    color: #FC8428;
+  }
+  
+  .leafet-control-locate-location circle {
+    animation: leaflet-control-locate-throb 4s ease infinite;
+  }
+  
+  @keyframes leaflet-control-locate-throb {
+    0% {
+      r: 9;
+      stroke-width: 1;
+    }
+    50% {
+      r: 7;
+      stroke-width: 3;
+    }
+    100% {
+      r: 9;
+      stroke-width: 1;
+    }
+  }

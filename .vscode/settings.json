@@ -1,0 +1,8 @@
+{
+    "search.exclude": {
+        "**/build": true
+    },
+    "fileheader.Author": "史涛",
+    "fileheader.LastModifiedBy": "史涛",
+    "git.ignoreLimitWarning": true
+}

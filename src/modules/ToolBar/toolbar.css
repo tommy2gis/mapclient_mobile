@@ -1,0 +1,155 @@
+.toolbar_card {
+    position: absolute;
+    z-index: 2000;
+    margin: 20px 10px;
+    right: 80px;
+}
+
+.toolbar_card>div {
+    padding: 2px;
+}
+
+.toolbar_cardcontent {
+    padding: 4px !important;
+}
+
+.toolbar_btn {
+    border: 0px;
+    color: #3a3a3a;
+    font-size: 16px;
+}
+
+.toolbar_card button {
+    line-height: 1.8em;
+    padding: 0px 10px;
+    min-height: 30px;
+    margin: 2px 0px;
+    border-radius: 0px;
+}
+
+@media screen and (max-width: 1366px) {
+    .toolbar_card button {
+        padding: 0px 6px;
+        min-height: 30px;
+        margin: 0px;
+        border-radius: 0px;
+        font-size: 12px;
+    }
+  }
+
+.toolbar_card button:first-child {
+    border-left: 0px;
+}
+
+.toolbar_card .iconfont {
+    margin: 0 4px;
+}
+
+.toolbar_card .ant-divider{
+    height: 2em;
+    background: #b7b7b7;
+    margin: 0px;
+}
+
+.toolbar_mapcompare_list {
+    margin-top: 10px;
+}
+
+.toolbar_comparemodal .ant-modal-content {
+    height: 100%;
+}
+
+.toolbar_comparemodal .ant-modal-body {
+    height: calc(100vh - 100px);
+}
+
+.toolbar_comparemodal .synccompare_panel,
+.toolbar_comparemodal .ScreemCompare_panel {
+    height: 100%;
+}
+
+.toolbar_comparemodal .synccompare_panel .leaflet-container,
+.toolbar_comparemodal .ScreemCompare_panel .leaflet-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swipe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+}
+
+.swipetop {
+    height: 50%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.swipeleft {
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+
+.swiperigth {
+    width: 20%;
+    height: 100%;
+    float: right;
+}
+
+.swipebottom {
+    height: 50%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.ScreemCompare_panel .ant-radio-group{
+    position: absolute;
+    z-index: 1000;
+    text-align: center;
+    left: 0;
+    right: 0;
+    margin-top: 10px;
+}
+
+.toolbar_measure_list{
+    margin-top: 10px;
+    width: 98px;
+}
+
+.toolbar_chenggaun_Popup .ant-popover-inner-content{
+    padding: 0px;
+}
+
+i.anticon.anticon-down {
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.toolbar_mapcompare_list i.iconfont {
+    margin: 0 4px;
+}
+
+@media screen and (max-width: 1366px) {
+    .toolbar_mapcompare_list,.toolbar_measure_list {
+        margin-top: 4px;
+    }
+
+    .toolbar_measure_list{
+        width: 80px;
+    }
+
+    .toolbar_map_list  .ant-menu-item{
+        line-height: 28px !important;
+        height: 28px !important;
+    }
+    .toolbar_map_list .ant-checkbox-wrapper{
+        font-size: 12px !important;
+    }
+  }
+
+

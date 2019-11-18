@@ -1,0 +1,17 @@
+.copyline_bottom{
+    position: absolute;
+    z-index: 2000;
+    bottom: 0px;
+    background-color: #ffffffdb;
+    padding: 2px 10px;
+    right: 0px;
+}
+.ant-modal-mask,.ant-modal-wrap,.ant-message{
+    z-index: 2000;
+}
+
+@media screen and (max-width: 1366px) {
+    .copyline_bottom {
+        font-size: 11px;
+    }
+  }

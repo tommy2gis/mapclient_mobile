@@ -1,0 +1,138 @@
+/* layers control */
+
+.leaflet-mini-map-control-layers {
+    background-color: rgb(255, 255, 255);
+    width: 0px;
+    bottom: 20px;
+}
+
+.leaflet-mini-map-control-layers-innerup {
+    background-color: @primary-color;
+    height: 30px;
+    padding: 4px 0px 0px 10px;
+    font-size: 16px;
+    display: none;
+    color: #FFF;
+}
+
+.leaflet-left .leaflet-control.leaflet-mini-map-control-layers {
+    /* > ie receives a mouseleave event when moving between minimaps if there's a transparent background */
+    background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+    margin: 0 0 14px 10px;
+}
+
+
+
+.leaflet-mini-map-control-layers .map-container {
+    background-color: #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    /*box-shadow: 0 1px 7px #999;*/
+    opacity: 0;
+    border: 1px solid #eee;
+    position: absolute;
+    top: 40px;
+    right: 0px;
+    margin-right: 10px;
+    visibility: hidden;
+    -webkit-transition-property: left, visibility, width, opacity;
+    -moz-transition-property: left, visibility, width, opacity;
+    -ms-transition-property: left, visibility, width, opacity;
+    -o-transition-property: left, visibility, width, opacity;
+    transition-property: left, visibility, width, opacity;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -ms-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-in-out;
+    -moz-transition-timing-function: ease-in-out;
+    -ms-transition-timing-function: ease-in-out;
+    -o-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+}
+
+.leaflet-mini-map-control-layers .map-container-inner {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+.leaflet-mini-map-control-layers.expanded .map-container {
+    opacity: 1;
+    visibility: visible;
+}
+
+.leaflet-mini-map-control-layers .active-map .leaflet-container {
+    cursor: default;
+}
+
+.leaflet-mini-map-control-layers .active-map,
+.leaflet-mini-map-control-layers .map-container:hover .map-label,
+.leaflet-mini-map-control-layers .map-container:hover {
+    background-color: @primary-color;
+    border-color: @primary-color;
+    color:#fff;
+}
+
+.leaflet-mini-map-control-layers .active-map,
+.leaflet-mini-map-control-layers .map-container:hover .map-label {
+    cursor: default;
+}
+
+.leaflet-mini-map-control-layers .suggested-map {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+.leaflet-mini-map-control-layers.notransition .map-container {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+.leaflet-mini-map-control-layers .map {
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.leaflet-mini-map-control-layers .map-label,
+.leaflet-mini-map-control-layers .active-map:hover .map-label {
+    font-weight: bold;
+    line-height: 22px;
+    overflow: hidden;
+    padding: 0 3px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leaflet-mini-map-control-layers-innersub {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    height: 30px;
+    background-color: #fff;
+    width: 100%;
+    border: 1px solid white;
+    border-top: 1px solid #b7b6b6;
+    padding: 0px;
+    margin-right: 10px;
+}
+
+.leaflet-mini-map-control-layers-innersub span {
+    margin-left: 10px;
+}
+
+.leaflet-mini-map-control-layers-innersub input {
+    margin-left: 6px;
+}
+
+.leaflet-mini-map-control-layers-innersub li {
+    border-bottom: 2px dotted #eee;
+    margin-bottom: 5px;
+    font-size: 14px;
+    list-style: none;
+}
