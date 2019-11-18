@@ -1,8 +1,8 @@
 /*
  * @Author: 史涛 
  * @Date: 2019-01-05 19:31:12 
- * @Last Modified by:   史涛 
- * @Last Modified time: 2019-01-05 19:31:12 
+ * @Last Modified by: 史涛
+ * @Last Modified time: 2019-11-18 17:35:19
  */
 
 const {
@@ -14,6 +14,7 @@ const {
     QUERY_ONFOCUS,
     CHANGE_QUERYKEY,
     CHANGE_QUERYAREAKEY,
+    QUERY_TASKS_RESULT,
     QUERY_SIMPLERESULT,
     RESET_QUERY
 } = require('../actions/query');
@@ -25,8 +26,8 @@ const assign = require('object-assign');
 const initialState = {
     featureTypes: {},
     data: {},
-    pageindex: 0,
-    page: 10,
+    pageindex: 1,
+    page: 4,
     type: '',
     key: '',
     areakey:null,
@@ -72,6 +73,12 @@ function query(state = initialState, action) {
         case QUERY_SIMPLERESULT: {
             return assign({}, state, {
                 simpleresult: action.simpleresult
+            });
+        }
+
+        case QUERY_TASKS_RESULT:{
+            return assign({}, state, {
+                tasksresult: action.result
             });
         }
 

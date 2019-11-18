@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:32 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-01-10 17:23:49
+ * @Last Modified time: 2019-11-18 17:43:04
  */
 
 const FEATURE_TYPE_LOADED = 'FEATURE_TYPE_LOADED';
@@ -19,6 +19,7 @@ const CHANGE_QUERYKEY = 'CHANGE_QUERYKEY';
 const CHANGE_QUERYAREAKEY = 'CHANGE_QUERYAREAKEY';
 const QUERY_SIMPLERESULT = 'QUERY_SIMPLERESULT';
 const COLLAPSE_RESULT = 'COLLAPSE_RESULT';
+const QUERY_TASKS_RESULT='QUERY_TASKS_RESULT';
 const axios = require('axios');
 import { message } from 'antd';
 var CancelToken = axios.CancelToken;
@@ -298,6 +299,34 @@ function queryOnFocus(inputfocus) {
 
 }
 
+
+function queryTasksResponse(result) {
+    return {
+        type: QUERY_TASKS_RESULT,
+        result
+    };
+}
+
+
+function queryTasks() {
+
+    return (dispatch, getState) => {
+        const query = getState().query;
+        return axios.get('http://localhost:38082/mobile/acquisition/taskinformation/pagelist', {
+            params: {
+                userId: 5,
+                size: query.page,
+                page: query.pageindex
+            }
+        }).then((response) => {
+            dispatch(queryTasksResponse(response.data.data));
+        }).catch((e) => {
+            message.warning('数据查询失败,请稍后再试');
+            dispatch(queryError(e));
+        });
+    };
+}
+
 module.exports = {
     FEATURE_TYPE_LOADED,
     FEATURE_LOADED,
@@ -319,10 +348,12 @@ module.exports = {
     onHotQuery,
     simpleQuery,
     QUERY_SIMPLERESULT,
+    QUERY_TASKS_RESULT,
     HOVER_RESULTINDEX,
     describeFeatureType,
     loadFeature,
     queryOnFocus,
     query,
+    queryTasks,
     resetQuery
 };

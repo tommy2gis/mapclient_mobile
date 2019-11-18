@@ -1,8 +1,8 @@
 /*
  * @Author: 史涛 
  * @Date: 2019-01-05 19:34:28 
- * @Last Modified by:   史涛 
- * @Last Modified time: 2019-01-05 19:34:28 
+ * @Last Modified by: 史涛
+ * @Last Modified time: 2019-11-18 11:41:20
  */
 var PropTypes = require('prop-types');
 
@@ -22,7 +22,7 @@ class ZoomControl extends React.Component {
 
     static defaultProps = {
         map: null,
-        position: 'topright',
+        position: 'bottomright',
         maxWidth: 100,
         metric: true,
         imperial: false,
