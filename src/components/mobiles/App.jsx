@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, NavBar, WingBlank } from "antd-mobile";
-import { changeMapView, mouseDownOnMap } from "../../actions/map";
+import { changeMapView, mouseDownOnMap,changeModel } from "../../actions/map";
 import { endDrawing } from "../../actions/draw";
 import { switchLayers } from "../../actions/layers";
 import { queryTasks } from "../../actions/query";
@@ -11,6 +11,9 @@ import Feature from "../map/Feature";
 import DrawSupport from "../map/DrawSupport";
 import ZoomControl from "../map/ZoomControl";
 import { NavLink } from "react-router-dom";
+import LayerSwitch from '../mobiles/LayerSwitch';
+import TaskDetail from '../mobiles/TaskDetail';
+import DataEdit from '../mobiles/DataEdit';
 import "leaflet/dist/leaflet.css";
 import "./style.less";
 import "../../themes/iconfont/iconfont.css";
@@ -20,7 +23,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       title: "app",
-      open: false
+      open: false,
+      model:'layerswitch',
     };
   }
 
@@ -58,6 +62,12 @@ class App extends React.Component {
     return null;
   };
 
+  showLayerChangeControl=()=>{
+    
+    const model=(!this.props.map.model||this.props.map.model=='main')?'layerswitch':'main'
+    this.props.changeModel(model);
+  }
+
   /**
    *渲染图层
    *
@@ -83,7 +93,8 @@ class App extends React.Component {
 
   render() {
     const { mapConfig, map, draw, query } = this.props;
-    const taskcount=query.tasksresult&&query.tasksresult.count;
+    const model=map&&map.model||'main';
+    const taskcount=query.tasksresult&&query.tasksresult.count||0;
     // console.log(this.props.route, this.props.params, this.props.routeParams);
     if (mapConfig && mapConfig.map) {
       return (
@@ -102,20 +113,20 @@ class App extends React.Component {
           ></NavBar>
 
           <a className="circlebtn compass-btn"></a>
-          <a className="circlebtn layerchange-btn"></a>
+          <a className="circlebtn layerchange-btn" onClick={this.showLayerChangeControl}></a>
           <a className="circlebtn location-btn"></a>
-          <NavLink
+          {model=='main'&&<NavLink
           to="/tasks"
           className="tasknum-btn"
           replace
         >
           {'当前任务数('+taskcount+')'}
-        </NavLink>
+        </NavLink>}
 
           <LMap
             id="map"
             ref="map"
-            className="clientmap"
+            className={"clientmap "+(model!='main'&&' bottommodel')}
             contextmenu={false}
             zoom={map.zoom}
             center={map.center}
@@ -135,6 +146,13 @@ class App extends React.Component {
               features={draw.features}
             />
           </LMap>
+          <div className='bottom-container'>
+            {model=='layerswitch'&&<LayerSwitch></LayerSwitch>}
+            {model=='taskdetail'&&<TaskDetail task={query.selecttask}></TaskDetail>}
+            {model=='dataedit'&&<DataEdit ></DataEdit>}
+            
+            
+          </div>
         </div>
       );
     }
@@ -164,6 +182,7 @@ export default connect(
     onSwitchLayer: switchLayers,
     endDrawing,
     mouseDownOnMap,
+    changeModel,
     queryTasks
   }
 )(App);

@@ -1,18 +1,19 @@
 /*
  * @Author: 史涛 
  * @Date: 2019-01-05 19:31:08 
- * @Last Modified by:   史涛 
- * @Last Modified time: 2019-01-05 19:31:08 
+ * @Last Modified by: 史涛
+ * @Last Modified time: 2019-11-19 10:55:19
  */
 
 
-var {CHANGE_MAP_VIEW, CHANGE_MOUSE_POINTER,
+var {CHANGE_MAP_VIEW, CHANGE_MOUSE_POINTER,CHANGE_MODEL,
     CHANGE_ZOOM_LVL, CHANGE_MAP_CRS, CHANGE_MAP_SCALES, ZOOM_TO_EXTENT, PAN_TO,
     CHANGE_MAP_STYLE, CHANGE_ROTATION, UPDATE_VERSION, ZOOM_TO_POINT, RESIZE_MAP} = require('../actions/map');
 const {isArray} = require('lodash');
 
 
 var assign = require('object-assign');
+
 
 
 function mapConfig(state = null, action) {
@@ -34,6 +35,10 @@ function mapConfig(state = null, action) {
         return assign({}, state, {
             projection: action.crs
         });
+    case CHANGE_MODEL:
+            return assign({}, state, {
+                model: action.model
+            });
    
     case ZOOM_TO_POINT: {
         return assign({}, state, {

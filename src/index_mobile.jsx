@@ -4,6 +4,9 @@ import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import App from './components/mobiles/App';
 import Tasks from './components/mobiles/Tasks';
+import TaskCollect from './components/mobiles/TaskCollect';
+import HistoryPatterns from './components/mobiles/HistoryPatterns';
+import DataCollect from './components/mobiles/DataCollect'
 import store from './store/configureStore';
 import './index_mobile.less';
 
@@ -19,6 +22,10 @@ ReactDOM.render(
                     <Switch>
                         <Route exact path="/" component={App} />
                         <Route path="/tasks" component={Tasks} />
+                        <Route path="/taskcollect" component={TaskCollect} />
+                        <Route path="/history" component={HistoryPatterns} />
+                        <Route path="/datacollect" component={DataCollect} />
+                        
                     </Switch>
                 </div>
         </HashRouter>

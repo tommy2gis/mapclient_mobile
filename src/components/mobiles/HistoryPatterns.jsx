@@ -1,5 +1,6 @@
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 import { ListView, NavBar } from "antd-mobile";
+import { Timeline } from 'antd';
 import React from "react";
 import { connect } from "react-redux";
 import ReactDOM from "react-dom";
@@ -9,86 +10,52 @@ import {selectTask} from '../../actions/query'
 import { changeModel } from "../../actions/map";
 
 const data = [
+  {
+    "id": "4b2513ef37334e969495f081566ce6d5",
+    "usrId": 25,
+    "name": "二次勘查数据",
+    "geo": "POINT(117.254182016447 31.8513633964723)",
+    "content": "数据回传",
+    "state": 2,
+    "createDate": "2019-01-08 13:36:21",
+    "tskId": "1cb2cf390d2c4dbe89eedcf6d3630f66",
+    "taskName": "安徽大学二次勘察",
+    "projectName": "国土局校园勘察项目",
+    "patternSpotName": "安徽大学校园",
+    "fileList": [
     {
-        "id": "c45ae84e16a6476daf6ed4c0df25c00e",
-        "tskClaId": "cdf8acf486434d31b86adcabd21bda7f",
-        "usrId": -1,
-        "pjtId": "bbf0ae890ef642da81a3d61299a42f00",
-        "ptnSptId": "525fd14316e140ba92644a8c3806dcef",
-        "name": "测试任务1",
-        "code": "TK0000005",
-        "startTime": "2019-11-05 00:00:00",
-        "endTime": "2019-11-21 00:00:00",
-        "sourceState": 0,
-        "flowState": 0,
-        "describes": "测试任务1",
-        "createDate": "2019-11-18 16:40:21",
-        "taskClassifyName": "测试分类",
-        "projectName": "测试项目",
-        "patternName": "测试图斑",
-        "patternGeo": "POINT(115.78011110817518 33.789996052312866)",
-        "userName": "超级管理员"
-        },
-        {
-        "id": "e1abae693eb3468a916c10e208eff646",
-        "tskClaId": "cdf8acf486434d31b86adcabd21bda7f",
-        "usrId": -1,
-        "pjtId": "bbf0ae890ef642da81a3d61299a42f00",
-        "ptnSptId": "525fd14316e140ba92644a8c3806dcef",
-        "name": "测试任务2",
-        "code": "TK0000006",
-        "startTime": "2019-11-06 00:00:00",
-        "endTime": "2019-11-23 00:00:00",
-        "sourceState": 0,
-        "flowState": 0,
-        "describes": "测试任务2",
-        "createDate": "2019-11-18 16:40:44",
-        "taskClassifyName": "测试分类",
-        "projectName": "测试项目",
-        "patternName": "测试图斑",
-        "patternGeo": "POINT(115.78011110817518 33.789996052312866)",
-        "userName": "超级管理员"
-        },
-        {
-        "id": "0ea2e93f9a244a8fa551b44da82ebfe4",
-        "tskClaId": "cdf8acf486434d31b86adcabd21bda7f",
-        "usrId": -1,
-        "pjtId": "bbf0ae890ef642da81a3d61299a42f00",
-        "ptnSptId": "525fd14316e140ba92644a8c3806dcef",
-        "name": "测试任务3",
-        "code": "TK0000007",
-        "startTime": "2019-11-12 00:00:00",
-        "endTime": "2019-11-22 00:00:00",
-        "sourceState": 0,
-        "flowState": 0,
-        "describes": "测试任务3",
-        "createDate": "2019-11-18 16:41:06",
-        "taskClassifyName": "测试分类",
-        "projectName": "测试项目",
-        "patternName": "测试图斑",
-        "patternGeo": "POINT(115.78011110817518 33.789996052312866)",
-        "userName": "超级管理员"
-        },
-        {
-        "id": "5e967226f7364d59ba5b573fe887b049",
-        "tskClaId": "cdf8acf486434d31b86adcabd21bda7f",
-        "usrId": -1,
-        "pjtId": "bbf0ae890ef642da81a3d61299a42f00",
-        "ptnSptId": "525fd14316e140ba92644a8c3806dcef",
-        "name": "测试任务4",
-        "code": "TK0000008",
-        "startTime": "2019-11-12 00:00:00",
-        "endTime": "2019-11-30 00:00:00",
-        "sourceState": 0,
-        "flowState": 0,
-        "describes": "测试任务4",
-        "createDate": "2019-11-18 16:41:29",
-        "taskClassifyName": "测试分类",
-        "projectName": "测试项目",
-        "patternName": "测试图斑",
-        "patternGeo": "POINT(115.78011110817518 33.789996052312866)",
-        "userName": "超级管理员"
-        }
+    "formart": "jpg",
+    "fileName": "20190108_013620.jpg",
+    "size": 773403,
+    "fileId": "708c6a5ec97245708449a912577b81a4",
+    "createDate": "2019-01-08"
+    }
+    ],
+    "userName": "国土局采集员"
+    },
+    {
+    "id": "e8bd658c91a540cca9a0c17f5c6af137",
+    "usrId": 25,
+    "name": "国土局勘查安徽大学校园",
+    "geo": "POINT(117.254300176406 31.8515085077522)",
+    "content": "返回数据图片",
+    "state": 2,
+    "createDate": "2019-01-08 13:29:49",
+    "tskId": "8f7fbad6eaa8439ea3aaa8c9774209fa",
+    "taskName": "安徽大学校园勘察",
+    "projectName": "国土局校园勘察项目",
+    "patternSpotName": "安徽大学校园",
+    "fileList": [
+    {
+    "formart": "jpg",
+    "fileName": "20190108_012948.jpg",
+    "size": 827390,
+    "fileId": "40e5a2b2dc07466c920d44bbd572a480",
+    "createDate": "2019-01-08"
+    }
+    ],
+    "userName": "国土局采集员"
+    }
 ];
 const NUM_SECTIONS = 1;
 const NUM_ROWS_PER_SECTION = 6;
@@ -115,7 +82,7 @@ function genData(pIndex = 0) {
   rowIDs = [...rowIDs];
 }
 
- class Tasks extends React.Component {
+ class HistoryPatterns extends React.Component {
   constructor(props) {
     super(props);
     const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
@@ -160,7 +127,7 @@ function genData(pIndex = 0) {
   _onTaskClick=(task)=>{
     this.props.history.push("/");
     this.props.selectTask(task);
-    this.props.changeModel('dataedit')
+    this.props.changeModel('taskdetail')
   }
 
   onEndReached = (event) => {
@@ -180,15 +147,6 @@ function genData(pIndex = 0) {
     }, 1000);
   }
 
-  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
-//   componentWillReceiveProps(nextProps) {
-//     if (nextProps.dataSource !== this.props.dataSource) {
-//       this.setState({
-//         dataSource: this.state.dataSource.cloneWithRowsAndSections(nextProps.dataSource),
-//       });
-//     }
-//   }
-
 
   render() {
     const separator = (sectionID, rowID) => (
@@ -207,34 +165,31 @@ function genData(pIndex = 0) {
       }
       const obj = data[index--];
       return (
-        <div key={rowID} style={{ padding: "0 15px" }}>
+        <Timeline.Item> 
+        <div key={rowID} style={{ padding: "10px 15px" }}>
           <div
             style={{
-              lineHeight: "50px",
+              lineHeight: "30px",
               color: "#888",
               fontSize: 18
             }}
           >
-            <img
-              className='taskimg'
-              src={renwupng}
-              alt=""
-            />
-            <span onClick={()=>this._onTaskClick(obj)} className='title'>{obj.name}</span>
-            <span className='datetime'>{obj.createDate}</span>
             
+             <span className='datetime'>{obj.createDate}</span>
+            <span onClick={()=>this._onTaskClick(obj)} className='title'>数据名称: {obj.name}</span>
           </div>
           <div className='detail' >
-                <span>图版名称: </span>{obj.patternName}
+                <span>巡查员: </span>{obj.userName}
                 <br/>
-                <span>任务描述: </span>{obj.describes}
+                <span>数据内容: </span>{obj.content}
           </div>
         </div>
+        </Timeline.Item>
       );
     };
 
     return (
-      <div className=" container taskcontainer">
+      <div className=" container historycontainer">
         <NavBar
           mode="light"
           onLeftClick={() => this.props.history.push("/")}
@@ -244,8 +199,9 @@ function genData(pIndex = 0) {
             </div>
           }
         >
-          我的任务
+          图斑历史巡查记录
         </NavBar>
+        <Timeline>
         <ListView
           ref={el => (this.lv = el)}
           dataSource={this.state.dataSource}
@@ -268,6 +224,9 @@ function genData(pIndex = 0) {
           onEndReached={this.onEndReached}
           onEndReachedThreshold={10}
         />
+
+  </Timeline>
+       
       </div>
     );
   }
@@ -283,5 +242,5 @@ export default connect(
     selectTask,
     changeModel
   }
-)(withRouter(Tasks));
+)(withRouter(HistoryPatterns));
 

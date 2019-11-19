@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:32 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-18 17:43:04
+ * @Last Modified time: 2019-11-19 11:08:48
  */
 
 const FEATURE_TYPE_LOADED = 'FEATURE_TYPE_LOADED';
@@ -20,6 +20,7 @@ const CHANGE_QUERYAREAKEY = 'CHANGE_QUERYAREAKEY';
 const QUERY_SIMPLERESULT = 'QUERY_SIMPLERESULT';
 const COLLAPSE_RESULT = 'COLLAPSE_RESULT';
 const QUERY_TASKS_RESULT='QUERY_TASKS_RESULT';
+const SELECT_TASK='SELECT_TASK';
 const axios = require('axios');
 import { message } from 'antd';
 var CancelToken = axios.CancelToken;
@@ -299,6 +300,13 @@ function queryOnFocus(inputfocus) {
 
 }
 
+function selectTask(task) {
+    return {
+        type: SELECT_TASK,
+        task
+    };
+}
+
 
 function queryTasksResponse(result) {
     return {
@@ -351,6 +359,8 @@ module.exports = {
     QUERY_TASKS_RESULT,
     HOVER_RESULTINDEX,
     describeFeatureType,
+    SELECT_TASK,
+    selectTask,
     loadFeature,
     queryOnFocus,
     query,

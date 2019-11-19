@@ -2,9 +2,10 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:28 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-01-10 17:23:27
+ * @Last Modified time: 2019-11-19 10:49:32
  */
 const CHANGE_MAP_VIEW = 'CHANGE_MAP_VIEW';
+const CHANGE_MODEL='CHANGE_MODEL';
 const CLICK_ON_MAP = 'CLICK_ON_MAP';
 const MOUSEDOWN_ON_MAP = 'MOUSEDOWN_ON_MAP';
 const CHANGE_MOUSE_POINTER = 'CHANGE_MOUSE_POINTER';
@@ -36,6 +37,15 @@ function zoomToPoint(pos, zoom, crs) {
         crs
     };
 }
+
+function changeModel(model) {
+    return {
+        type: CHANGE_MODEL,
+        model
+    };
+}
+
+
 
 function changeMapView(center, zoom, bbox, size, mapStateSource, projection, viewerOptions) {
     return {
@@ -176,6 +186,8 @@ module.exports = {
     changeRotation,
     zoomToPoint,
     creationError,
+    CHANGE_MODEL,
+    changeModel,
     updateVersion,
     initMap,
     resizeMap

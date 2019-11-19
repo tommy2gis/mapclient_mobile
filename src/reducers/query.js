@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:31:12 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-18 17:35:19
+ * @Last Modified time: 2019-11-19 11:10:00
  */
 
 const {
@@ -16,6 +16,7 @@ const {
     CHANGE_QUERYAREAKEY,
     QUERY_TASKS_RESULT,
     QUERY_SIMPLERESULT,
+    SELECT_TASK,
     RESET_QUERY
 } = require('../actions/query');
 
@@ -73,6 +74,12 @@ function query(state = initialState, action) {
         case QUERY_SIMPLERESULT: {
             return assign({}, state, {
                 simpleresult: action.simpleresult
+            });
+        }
+
+        case SELECT_TASK:{
+            return assign({}, state, {
+                selecttask: action.task
             });
         }
 
