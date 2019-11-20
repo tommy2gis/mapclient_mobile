@@ -93,6 +93,54 @@ class App extends React.Component {
     return null;
   };
 
+  renderHeadLeft = model => {
+    switch (model) {
+      case "main":
+        return (
+          <div>
+            <NavLink to="/login" className="login-btn" replace></NavLink>
+            <span style={{ marginLeft: 40 }}>点击登录</span>
+          </div>
+        );
+        break;
+      case "taskdetail":
+        return (
+          <div>
+            <a className="back-main"></a>
+          </div>
+        );
+        break;
+      case "dataedit":
+        return (
+          <div>
+            <a className="back-main"></a>
+          </div>
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  renderHeadRight = model => {
+    switch (model) {
+      case "main":
+        return (
+          <b onClick={() => this.setState({ open: true })}>...</b>
+        );
+        break;
+      case "dataedit":
+        return (
+           <NavLink to="/datacollect" style={{color:'#fff'}} replace>完成</NavLink>
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
   render() {
     const { mapConfig, map, draw, query } = this.props;
     const model = (map && map.model) || "main";
@@ -103,16 +151,20 @@ class App extends React.Component {
         <div className="container">
           <NavBar
             mode="light"
-            leftContent={
-              <div>
-                <NavLink to="/login" className="login-btn" replace></NavLink>
-                <span style={{ marginLeft: 40 }}>点击登录</span>
-              </div>
-            }
-            rightContent={
-              <b onClick={() => this.setState({ open: true })}>...</b>
-            }
-          ></NavBar>
+            onLeftClick={() => {
+              if (model == "taskdetail" || model == "dataedit") {
+                this.props.changeModel("main");
+              }
+            }}
+            leftContent={this.renderHeadLeft(model)}
+            rightContent={this.renderHeadRight(model)}
+          >
+            {model == "taskdetail"
+              ? "详细信息"
+              : model == "dataedit"
+              ? "数据编辑"
+              : ""}
+          </NavBar>
 
           <a className="circlebtn compass-btn"></a>
           <a
