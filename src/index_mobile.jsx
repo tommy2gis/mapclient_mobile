@@ -6,7 +6,8 @@ import App from './components/mobiles/App';
 import Tasks from './components/mobiles/Tasks';
 import TaskCollect from './components/mobiles/TaskCollect';
 import HistoryPatterns from './components/mobiles/HistoryPatterns';
-import DataCollect from './components/mobiles/DataCollect'
+import DataCollect from './components/mobiles/DataCollect';
+import login from './components/mobiles/login';
 import store from './store/configureStore';
 import './index_mobile.less';
 
@@ -25,6 +26,7 @@ ReactDOM.render(
                         <Route path="/taskcollect" component={TaskCollect} />
                         <Route path="/history" component={HistoryPatterns} />
                         <Route path="/datacollect" component={DataCollect} />
+                        <Route path="/login" component={login} />
                         
                     </Switch>
                 </div>
