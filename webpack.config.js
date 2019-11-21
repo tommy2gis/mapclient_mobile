@@ -28,7 +28,7 @@ module.exports = {
     port: 8080,
     proxy: {
             "/mobile/*": {
-              target: 'http://192.168.1.66:10001',
+              target: 'http://localhost:10001',
               changeOrigin: true 
             },
             "ArcGIS/*":{

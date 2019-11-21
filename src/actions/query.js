@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:32 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-19 11:08:48
+ * @Last Modified time: 2019-11-21 17:46:35
  */
 
 const FEATURE_TYPE_LOADED = 'FEATURE_TYPE_LOADED';
@@ -21,13 +21,43 @@ const QUERY_SIMPLERESULT = 'QUERY_SIMPLERESULT';
 const COLLAPSE_RESULT = 'COLLAPSE_RESULT';
 const QUERY_TASKS_RESULT='QUERY_TASKS_RESULT';
 const SELECT_TASK='SELECT_TASK';
+const SELECT_PATTEN='SELECT_PATTEN';
+const QUERY_PATTENS_RESULT='QUERY_PATTENS_RESULT';
+const LOGIN='LOGIN';
 const axios = require('axios');
 import { message } from 'antd';
 var CancelToken = axios.CancelToken;
 var cancel;
 
+function loginResponse(userinfo) {
+    return {
+        type: LOGIN,
+        userinfo
+    };
+}
 
-
+function login(userName,passWord) {
+    return (dispatch,getState) => {
+        return axios.get(ServerUrl + "/mobile/acquisition/usermanagement/login",{
+            params: {
+                "userName":userName,
+                "passWord": passWord
+            }
+        }).then((response) => {
+            if (response.data.code === 200) {
+                dispatch(loginResponse(response.data.data));
+                return response.data.data;
+            } else {
+                //message.warning('提交数据失败,请稍后再试');
+            }
+    
+        }).catch((e) => {
+            //message.warning('提交数据失败,请稍后再试');
+        });
+       
+    }
+    
+}
 
 function featureTypeLoaded(typeName, featureType) {
     return {
@@ -300,6 +330,43 @@ function queryOnFocus(inputfocus) {
 
 }
 
+function selectPatten(patten) {
+    return {
+        type: SELECT_PATTEN,
+        patten
+    };
+}
+
+
+function queryPattensResponse(result) {
+    return {
+        type: QUERY_PATTENS_RESULT,
+        result
+    };
+}
+
+
+function queryPattens(pageindex,size) {
+
+    return (dispatch, getState) => {
+        const query = getState().query;
+        return axios.get(ServerUrl+'/mobile/acquisition/datamanagement/pagelist', {
+            params: {
+                userId: 25,
+                ptnSptId:'dd5ba539d85d42b18536ee1f9cc709f1',
+                state:2,
+                size: size||query.page,
+                page: pageindex||query.pageindex
+            }
+        }).then((response) => {
+            dispatch(queryPattensResponse(response.data.data));
+        }).catch((e) => {
+            message.warning('数据查询失败,请稍后再试');
+            dispatch(queryError(e));
+        });
+    };
+}
+
 function selectTask(task) {
     return {
         type: SELECT_TASK,
@@ -316,15 +383,15 @@ function queryTasksResponse(result) {
 }
 
 
-function queryTasks() {
+function queryTasks(pageindex,size) {
 
     return (dispatch, getState) => {
         const query = getState().query;
-        return axios.get('http://localhost:38082/mobile/acquisition/taskinformation/pagelist', {
+        return axios.get(ServerUrl+'/mobile/acquisition/taskinformation/pagelist', {
             params: {
                 userId: 5,
-                size: query.page,
-                page: query.pageindex
+                size: size||query.page,
+                page: pageindex||query.pageindex
             }
         }).then((response) => {
             dispatch(queryTasksResponse(response.data.data));
@@ -336,7 +403,11 @@ function queryTasks() {
 }
 
 module.exports = {
+    queryPattens,
+    selectPatten,
     FEATURE_TYPE_LOADED,
+    QUERY_PATTENS_RESULT,
+    SELECT_PATTEN,
     FEATURE_LOADED,
     FEATURE_TYPE_ERROR,
     FEATURE_ERROR,
@@ -364,6 +435,8 @@ module.exports = {
     loadFeature,
     queryOnFocus,
     query,
+    login,
+    LOGIN,
     queryTasks,
     resetQuery
 };

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Button,TextareaItem,Picker, NavBar,List, InputItem } from "antd-mobile";
+import {changeModel} from "../../actions/map";
 import { createForm } from "rc-form";
 import photopng from './assets/photo.png'
 const  types=[{
@@ -11,6 +13,10 @@ const  types=[{
 class DataCollect extends Component {
   static propTypes = {
     prop: PropTypes
+  };
+  _onDataClick = () => {
+    this.props.history.push("/");
+    this.props.changeModel("dataedit");
   };
 
   render() {
@@ -25,6 +31,12 @@ class DataCollect extends Component {
               <a className="back-main"></a>
             </div>
           }
+          rightContent={
+            <div onClick={this._onDataClick}>
+              地图
+            </div>
+          }
+          
         >
           
           数据采集
@@ -101,4 +113,13 @@ class DataCollect extends Component {
   }
 }
 
-export default createForm()(DataCollect);
+
+export default connect(
+  state => {
+    return {};
+  },
+  {
+    changeModel
+  }
+)(createForm()(DataCollect));
+

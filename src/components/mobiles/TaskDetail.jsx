@@ -14,7 +14,12 @@ export default class TaskDetail extends Component {
       const task=this.props.task;
       return (
         <Card>
-          <Card.Header title={task.name} extra={<span>历史记录</span>}/>
+          <Card.Header title={task.name} extra={<NavLink
+          to="/history"
+          replace style={{fontSize: 'initial',color: '#2b87fd'}}
+        >
+          历史记录
+        </NavLink>}/>
           <Card.Body>
             <div className='detail' >
                   <span>图版名称: </span>{task.patternName}
@@ -22,7 +27,7 @@ export default class TaskDetail extends Component {
                   <span>任务描述: </span>{task.describes}
             </div>
             <NavLink
-          to="/tasks"
+          to="/taskcollect"
           className="taskroad-btn"
           replace
         >

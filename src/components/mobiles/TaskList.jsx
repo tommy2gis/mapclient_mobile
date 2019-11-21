@@ -1,15 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Timeline } from 'antd';
 import ReactDOM from "react-dom";
 import renwupng from "./assets/renwu.png";
 import { withRouter } from "react-router-dom";
-import { selectTask, queryTasks } from "../../actions/query";
+import { selectTask, queryTasks,queryPattens } from "../../actions/query";
 import { changeModel } from "../../actions/map";
 
 import { NavBar, ListView, Button, Toast, List } from "antd-mobile";
 
-class HistoryPatterns extends React.Component {
+class OutputList extends React.Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
@@ -31,8 +30,8 @@ class HistoryPatterns extends React.Component {
   componentDidMount() {
     this.renderResize();
 
-    if (this.props.query.pattensresult) {
-      this.initData = this.props.query.pattensresult.result;
+    if (this.props.query.tasksresult) {
+      this.initData = this.props.query.tasksresult.result;
       if (this.initData.length < this.state.pageSize) {
         this.setState({
           hasMore: false
@@ -103,15 +102,15 @@ class HistoryPatterns extends React.Component {
   // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.query.pattensresult.result !== this.props.query.pattensresult.result
+      nextProps.query.tasksresult.result !== this.props.query.tasksresult.result
     ) {
-      this.initData=this.initData.concat(nextProps.query.pattensresult.result);
+      this.initData=this.initData.concat(nextProps.query.tasksresult.result);
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(
           this.initData
         )
       });
-      if (this.initData.length >= nextProps.query.pattensresult.count) {
+      if (this.initData.length >= nextProps.query.tasksresult.count) {
         this.setState({
           hasMore: false,
           isLoading: false
@@ -124,31 +123,35 @@ class HistoryPatterns extends React.Component {
     this.props.history.push("/");
     this.props.selectTask(task);
     this.props.changeModel("taskdetail");
+    this.props.queryPattens();
+    
   };
 
   renderList() {
     const row = dataRow => {
       return (
-        <Timeline.Item> 
-        <div key={dataRow} style={{ padding: "10px 15px" }}>
+        <div key={dataRow} style={{ padding: "0 15px" }}>
           <div
             style={{
-              lineHeight: "30px",
+              lineHeight: "50px",
               color: "#888",
               fontSize: 18
             }}
           >
-            
-             <span className='datetime'>{dataRow.createDate}</span>
-            <span onClick={()=>this._onTaskClick(obj)} className='title'>数据名称: {dataRow.name}</span>
+            <img className="taskimg" src={renwupng} alt="" />
+            <span onClick={() => this._onTaskClick(dataRow)} className="title">
+              {dataRow.name}
+            </span>
+            <span className="datetime">{dataRow.createDate}</span>
           </div>
-          <div className='detail' >
-                <span>巡查员: </span>{dataRow.userName}
-                <br/>
-                <span>数据内容: </span>{dataRow.content}
+          <div className="detail">
+            <span>图版名称: </span>
+            {dataRow.patternName}
+            <br />
+            <span>任务描述: </span>
+            {dataRow.describes}
           </div>
         </div>
-        </Timeline.Item>
       );
     };
     return (
@@ -177,22 +180,19 @@ class HistoryPatterns extends React.Component {
 
   render() {
     return (
-      <div className=" container historycontainer">
+      <div className=" container taskcontainer">
         <NavBar
           mode="light"
           onLeftClick={() => this.props.history.push("/")}
           leftContent={
             <div>
-              <a className="back-main"  ></a>
+              <a className="back-main"></a>
             </div>
           }
         >
-          图斑历史巡查记录
+          我的任务
         </NavBar>
-        <Timeline>
         {this.renderList()}
-        </Timeline>
-        
       </div>
     );
   }
@@ -205,6 +205,7 @@ export default connect(
   {
     selectTask,
     changeModel,
-    queryTasks
+    queryTasks,
+    queryPattens
   }
-)(withRouter(HistoryPatterns));
+)(withRouter(OutputList));

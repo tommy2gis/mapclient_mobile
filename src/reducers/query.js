@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:31:12 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-19 11:10:00
+ * @Last Modified time: 2019-11-21 17:48:18
  */
 
 const {
@@ -17,7 +17,10 @@ const {
     QUERY_TASKS_RESULT,
     QUERY_SIMPLERESULT,
     SELECT_TASK,
-    RESET_QUERY
+    QUERY_PATTENS_RESULT,
+    SELECT_PATTEN,
+    RESET_QUERY,
+    LOGIN
 } = require('../actions/query');
 
 const assign = require('object-assign');
@@ -28,7 +31,7 @@ const initialState = {
     featureTypes: {},
     data: {},
     pageindex: 1,
-    page: 4,
+    page: 7,
     type: '',
     key: '',
     areakey:null,
@@ -37,6 +40,7 @@ const initialState = {
     result: '',
     resultcollapsed: false,
     simpleresult: '',
+    tasksresult:null,
     hoverid: null,
     selectedid: null,
     resultError: null
@@ -47,6 +51,13 @@ function query(state = initialState, action) {
         case QUERY_RESULT: {
             return assign({}, state, {
                 result: action.result,
+                resultError: null
+            });
+        }
+
+        case LOGIN: {
+            return assign({}, state, {
+                userinfo: action.userinfo,
                 resultError: null
             });
         }
@@ -88,6 +99,19 @@ function query(state = initialState, action) {
                 tasksresult: action.result
             });
         }
+
+        case SELECT_PATTEN:{
+            return assign({}, state, {
+                selectpatten: action.task
+            });
+        }
+
+        case QUERY_PATTENS_RESULT:{
+            return assign({}, state, {
+                pattensresult: action.result
+            });
+        }
+
 
 
         case QUERY_ONFOCUS: {

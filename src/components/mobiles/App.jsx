@@ -94,12 +94,15 @@ class App extends React.Component {
   };
 
   renderHeadLeft = model => {
+    const userinfo = this.props.query.userinfo;
     switch (model) {
       case "main":
         return (
           <div>
             <NavLink to="/login" className="login-btn" replace></NavLink>
-            <span style={{ marginLeft: 40 }}>点击登录</span>
+            <span style={{ marginLeft: 40 }}>
+              {userinfo ? userinfo.realName : "点击登录"}
+            </span>
           </div>
         );
         break;
@@ -126,13 +129,13 @@ class App extends React.Component {
   renderHeadRight = model => {
     switch (model) {
       case "main":
-        return (
-          <b onClick={() => this.setState({ open: true })}>...</b>
-        );
+        return <b onClick={() => this.setState({ open: true })}>...</b>;
         break;
       case "dataedit":
         return (
-           <NavLink to="/datacollect" style={{color:'#fff'}} replace>完成</NavLink>
+          <NavLink to="/datacollect" style={{ color: "#fff" }} replace>
+            完成
+          </NavLink>
         );
         break;
 
@@ -167,6 +170,14 @@ class App extends React.Component {
           </NavBar>
 
           <a className="circlebtn compass-btn"></a>
+          {
+            model == "main"&&<NavLink
+            to="/datacollect"
+            className="circlebtn adddata-btn"
+            replace
+            ></NavLink>
+          }
+         
           <a
             className="circlebtn layerchange-btn"
             onClick={this.showLayerChangeControl}

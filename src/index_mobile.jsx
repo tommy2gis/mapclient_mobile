@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import App from './components/mobiles/App';
-import Tasks from './components/mobiles/Tasks';
+import TaskList from './components/mobiles/TaskList';
 import TaskCollect from './components/mobiles/TaskCollect';
+//import HistoryPatterns from './components/mobiles/HistoryPatterns';
 import HistoryPatterns from './components/mobiles/HistoryPatterns';
 import DataCollect from './components/mobiles/DataCollect';
 import login from './components/mobiles/login';
@@ -22,7 +23,7 @@ ReactDOM.render(
                 <div>
                     <Switch>
                         <Route exact path="/" component={App} />
-                        <Route path="/tasks" component={Tasks} />
+                        <Route path="/tasks" component={TaskList} />
                         <Route path="/taskcollect" component={TaskCollect} />
                         <Route path="/history" component={HistoryPatterns} />
                         <Route path="/datacollect" component={DataCollect} />
