@@ -1,4 +1,5 @@
 import React from "react";
+const axios = require('axios');
 import { connect } from "react-redux";
 import { Toast, NavBar, WingBlank } from "antd-mobile";
 import { changeMapView, mouseDownOnMap, changeModel } from "../../actions/map";
@@ -30,8 +31,28 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.weixin();
     this.props.queryTasks();
   }
+
+  weixin = () => {
+    axios
+      .get(ServerUrl + "/wx/config", {
+        params: {
+          url: window.location.href
+        }
+      })
+      .then(res => {
+        wx.config(res.data);
+        wx.ready(res => {
+          console.log("wx.ready", res);
+        });
+        wx.error(err => {
+          console.log(err.errMsg);
+        });
+      })
+      .catch(e => {});
+  };
 
   /**
    *渲染图层
@@ -83,33 +104,35 @@ class App extends React.Component {
       if (layers.refreshing) {
         layers = layers.refreshing;
       }
-      return layers.map(layer => {
-        return (
-          <LLayer type={layer.type} key={layer.name} options={layer}>
-            {this.renderLayerContent(layer, projection)}
+      return layers
+        .map(layer => {
+          return (
+            <LLayer type={layer.type} key={layer.name} options={layer}>
+              {this.renderLayerContent(layer, projection)}
+            </LLayer>
+          );
+        })
+        .concat([
+          <LLayer
+            type="vector"
+            key="location_marker"
+            options={{
+              name: "location_marker",
+              type: "vector",
+              visibility: true
+            }}
+          >
+            {this.renderLocationContent()}
           </LLayer>
-        );
-      }).concat([
-        <LLayer
-          type="vector"
-          key="location_marker"
-          options={{
-            name: "location_marker",
-            type: "vector",
-            visibility: true
-          }}
-        >
-          {this.renderLocationContent()}
-        </LLayer>
-      ]);
+        ]);
     }
     return null;
   };
 
   renderLocationContent = () => {
-    const loc=this.props.query.curloc
+    const loc = this.props.query.curloc;
     if (loc) {
-      let style={
+      let style = {
         color: "#eee",
         weight: 4,
         opacity: 0.8,
@@ -125,21 +148,23 @@ class App extends React.Component {
         },
         properties: {}
       };
-      return  <Feature
-      key='userloc'
-      type={fea.type}
-      crs={this.props.map.projection}
-      geometry={fea.geometry}
-      featuresCrs={"EPSG:4326"}
-      style={style}
-      zoomTo={true}
-      properties={fea.properties}
-    />;
+      return (
+        <Feature
+          key="userloc"
+          type={fea.type}
+          crs={this.props.map.projection}
+          geometry={fea.geometry}
+          featuresCrs={"EPSG:4326"}
+          style={style}
+          zoomTo={true}
+          properties={fea.properties}
+        />
+      );
     }
     return null;
   };
 
-    /**
+  /**
    *创建要素
    *
    * @param {*} fea
@@ -156,19 +181,19 @@ class App extends React.Component {
       option.style ||
       (fea.geometry.type == "Point"
         ? {
-          iconGlyph: "embassy",
-          iconColor: "cyan",
-          iconPrefix: "map-icon",
-          iconLibrary: "extra"
-        }
+            iconGlyph: "embassy",
+            iconColor: "cyan",
+            iconPrefix: "map-icon",
+            iconLibrary: "extra"
+          }
         : {
-          color: "#eee",
-          weight: 4,
-          opacity: 0.8,
-          fill: true,
-          fillColor: "#000",
-          fillOpacity: 0.8
-        });
+            color: "#eee",
+            weight: 4,
+            opacity: 0.8,
+            fill: true,
+            fillColor: "#000",
+            fillOpacity: 0.8
+          });
     return (
       <Feature
         key={option.key}
@@ -218,16 +243,16 @@ class App extends React.Component {
         break;
     }
   };
-  getLocation=e=>{
+  getLocation = e => {
     wx.getLocation({
-      success: (res)=>{
+      success: res => {
         this.props.getUserLocation(res);
       },
-      cancel: function (res) {
-        Toast.info('用户拒绝授权获取地理位置', 1);
+      cancel: function(res) {
+        Toast.info("用户拒绝授权获取地理位置", 1);
       }
     });
-  }
+  };
 
   renderHeadRight = model => {
     switch (model) {
@@ -273,14 +298,14 @@ class App extends React.Component {
           </NavBar>
 
           {/* <a className="circlebtn compass-btn"></a> */}
-          {
-            model == "main"&&<NavLink
-            to="/datacollect"
-            className="circlebtn adddata-btn"
-            replace
+          {model == "main" && (
+            <NavLink
+              to="/datacollect"
+              className="circlebtn adddata-btn"
+              replace
             ></NavLink>
-          }
-         
+          )}
+
           <a
             className="circlebtn layerchange-btn"
             onClick={this.showLayerChangeControl}

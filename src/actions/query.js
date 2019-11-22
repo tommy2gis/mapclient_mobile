@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:32 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-22 21:59:42
+ * @Last Modified time: 2019-11-22 23:32:55
  */
 
 const FEATURE_TYPE_LOADED = 'FEATURE_TYPE_LOADED';
