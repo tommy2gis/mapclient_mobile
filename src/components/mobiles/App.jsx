@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, NavBar, WingBlank } from "antd-mobile";
+import { Toast, NavBar, WingBlank } from "antd-mobile";
 import { changeMapView, mouseDownOnMap, changeModel } from "../../actions/map";
 import { endDrawing } from "../../actions/draw";
 import { switchLayers } from "../../actions/layers";
-import { queryTasks } from "../../actions/query";
+import { queryTasks,getUserLocation } from "../../actions/query";
 import LMap from "../map/Map";
 import LLayer from "../map/Layer";
 import Feature from "../map/Feature";
@@ -17,6 +17,7 @@ import DataEdit from "../mobiles/DataEdit";
 import "leaflet/dist/leaflet.css";
 import "./style.less";
 import "../../themes/iconfont/iconfont.css";
+import wx from 'weixin-js-sdk';
 
 class App extends React.Component {
   constructor(props) {
@@ -88,15 +89,107 @@ class App extends React.Component {
             {this.renderLayerContent(layer, projection)}
           </LLayer>
         );
-      });
+      }).concat([
+        <LLayer
+          type="vector"
+          key="location_marker"
+          options={{
+            name: "location_marker",
+            type: "vector",
+            visibility: true
+          }}
+        >
+          {this.renderLocationContent()}
+        </LLayer>
+      ]);
     }
     return null;
+  };
+
+  renderLocationContent = () => {
+    const loc=this.props.query.curloc
+    if (loc) {
+      let style={
+        color: "#eee",
+        weight: 4,
+        opacity: 0.8,
+        fill: true,
+        fillColor: "#fd8e2c",
+        fillOpacity: 1
+      };
+      let fea = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [loc.longitude, loc.latitude]
+        },
+        properties: {}
+      };
+      return  <Feature
+      key='userloc'
+      type={fea.type}
+      crs={this.props.map.projection}
+      geometry={fea.geometry}
+      featuresCrs={"EPSG:4326"}
+      style={style}
+      zoomTo={true}
+      properties={fea.properties}
+    />;
+    }
+    return null;
+  };
+
+    /**
+   *创建要素
+   *
+   * @param {*} fea
+   * @param {*} option
+   * @returns
+   */
+  createMarker = (fea, option) => {
+    if (typeof fea.geometry != "object") {
+      fea.geometry = JSON.parse(fea.geometry);
+      //fea.geometry.indexOf('type')>-1?JSON.parse(fea.geometry):parse(fea.geometry);
+    }
+
+    let style =
+      option.style ||
+      (fea.geometry.type == "Point"
+        ? {
+          iconGlyph: "embassy",
+          iconColor: "cyan",
+          iconPrefix: "map-icon",
+          iconLibrary: "extra"
+        }
+        : {
+          color: "#eee",
+          weight: 4,
+          opacity: 0.8,
+          fill: true,
+          fillColor: "#000",
+          fillOpacity: 0.8
+        });
+    return (
+      <Feature
+        key={option.key}
+        type={fea.type}
+        crs={this.props.map.projection}
+        geometry={fea.geometry}
+        featuresCrs={"EPSG:4326"}
+        styleName={fea.properties.styleName}
+        style={style}
+        title={option.title}
+        zIndexOffset={option.zIndexOffset || 0}
+        properties={fea.properties}
+      />
+    );
   };
 
   renderHeadLeft = model => {
     const userinfo = this.props.query.userinfo;
     switch (model) {
       case "main":
+      case "layerswitch":
         return (
           <div>
             <NavLink to="/login" className="login-btn" replace></NavLink>
@@ -125,6 +218,16 @@ class App extends React.Component {
         break;
     }
   };
+  getLocation=e=>{
+    wx.getLocation({
+      success: (res)=>{
+        this.props.getUserLocation(res);
+      },
+      cancel: function (res) {
+        Toast.info('用户拒绝授权获取地理位置', 1);
+      }
+    });
+  }
 
   renderHeadRight = model => {
     switch (model) {
@@ -169,7 +272,7 @@ class App extends React.Component {
               : ""}
           </NavBar>
 
-          <a className="circlebtn compass-btn"></a>
+          {/* <a className="circlebtn compass-btn"></a> */}
           {
             model == "main"&&<NavLink
             to="/datacollect"
@@ -182,7 +285,7 @@ class App extends React.Component {
             className="circlebtn layerchange-btn"
             onClick={this.showLayerChangeControl}
           ></a>
-          <a className="circlebtn location-btn"></a>
+          <a className="circlebtn location-btn" onClick={this.getLocation}></a>
           {model == "main" && (
             <NavLink to="/tasks" className="tasknum-btn" replace>
               {"当前任务数(" + taskcount + ")"}
@@ -227,6 +330,7 @@ class App extends React.Component {
 }
 
 require("../map/WMTSLayer");
+require("../map/VectorLayer");
 
 export default connect(
   state => {
@@ -249,6 +353,7 @@ export default connect(
     endDrawing,
     mouseDownOnMap,
     changeModel,
-    queryTasks
+    queryTasks,
+    getUserLocation
   }
 )(App);

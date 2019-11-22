@@ -35,6 +35,8 @@ var GeoWMTS = L.TileLayer.extend({
             }
         }
         this.wmtsParams = wmtsParams;
+       
+        
         L.setOptions(this, options);
     },
     onAdd: function (map) {
@@ -73,7 +75,7 @@ var GeoTDTWMTS = GeoWMTS.extend({
         }
         for (var i in options) {
             // all keys that are not TileLayer options go to WMTS params
-            if (!this.options.hasOwnProperty(i) && i != "matrixIds"&& i != "url"&&i!="onError") {
+            if (!this.options.hasOwnProperty(i) && i != "id"&& i != "matrixIds"&& i != "url"&&i!="onError") {
                 wmtsParams[i] = options[i];
             }
         }

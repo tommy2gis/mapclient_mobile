@@ -9,9 +9,26 @@ const  types=[{
     }]
 
 class TaskCollect extends Component {
-  static propTypes = {
-    prop: PropTypes
-  };
+  submit=()=>{
+    return axios.post(ServerUrl + "/acquisition/dataInformation/save",{
+      "usrId":userName,
+      "name": passWord,
+      "geo":'',
+      "content":'',
+      "state":0,
+      "type":'',
+      "tskId":'',
+      "fileTemporaryNames":'',
+      "fileNames":''
+
+
+  }).then((response) => {
+
+
+  }).catch((e) => {
+      //message.warning('提交数据失败,请稍后再试');
+  });
+  }
 
   render() {
     const { getFieldProps } = this.props.form;
@@ -50,15 +67,15 @@ class TaskCollect extends Component {
         >
           <List.Item arrow="horizontal">数据类型</List.Item>
         </Picker>
-        <div class="am-list-item am-input-item am-list-item-middle">
-          <div class="am-list-line">
-            <div class="am-input-label am-input-label-5">添加照片</div>
-            <div class="am-input-control">
+        <div className="am-list-item am-input-item am-list-item-middle">
+          <div className="am-list-line">
+            <div className="am-input-label am-input-label-5">添加照片</div>
+            <div className="am-input-control">
                 <img src={photopng}></img>
             </div>
           </div>
         </div>
-        <Button
+        <Button onClick={this.submit}
           className="taskroad-btn"
         >
           提交

@@ -1,8 +1,8 @@
 /*
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:51 
- * @Last Modified by:   史涛 
- * @Last Modified time: 2019-01-05 19:33:51 
+ * @Last Modified by: 史涛
+ * @Last Modified time: 2019-11-22 16:55:22
  */
 const PropTypes = require("prop-types");
 
@@ -380,18 +380,18 @@ class Feature extends React.Component {
     }
 
     let mapbounds = props.container._map.getBounds();
-    /* if (this._layer instanceof L.Marker||this._layer instanceof L.CircleMarker) {
-            let point = this._layer.getLatLng();
-            if (props.zoomTo || !mapbounds.contains(point)) {
-                props.container._map.panTo(point);
-            }
-        } else {
-            let feabounds = this._layer.getBounds();
-            if (props.zoomTo || !mapbounds.contains(feabounds)) {
-                props.container._map.flyToBounds(feabounds);
-            }
+    if (this._layer instanceof L.Marker||this._layer instanceof L.CircleMarker) {
+      let point = this._layer.getLatLng();
+      if (props.zoomTo) {
+          props.container._map.setView(point,18);
+      }
+  } else {
+      let feabounds = this._layer.getBounds();
+      if (props.zoomTo ) {
+          props.container._map.flyToBounds(feabounds);
+      }
 
-        } */
+  }
 
     if (props.title) {
       this._layer.bindTooltip(props.title, {

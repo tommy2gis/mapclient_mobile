@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:30:42 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-01-08 11:22:07
+ * @Last Modified time: 2019-11-22 10:07:52
  */
 
 
@@ -91,7 +91,7 @@ function mapConfig(state = null, action) {
                 if (layer.name.indexOf(action.layername) != -1 ) {
                     return assign({}, layer, { visibility: action.visiable });
                 }
-                return assign({}, layer, { visibility: false });
+                return assign({}, layer);
             });
             return assign({}, state, { layers: newLayers});
         

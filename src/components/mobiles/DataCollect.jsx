@@ -11,13 +11,31 @@ const  types=[{
     }]
 
 class DataCollect extends Component {
-  static propTypes = {
-    prop: PropTypes
-  };
   _onDataClick = () => {
     this.props.history.push("/");
     this.props.changeModel("dataedit");
   };
+  submit=()=>{
+    return axios.post(ServerUrl + "/acquisition/dataInformation/save",{
+      "usrId":userName,
+      "name": passWord,
+      "geo":'',
+      "content":'',
+      "state":0,
+      "track":'',
+      "trackLength":'',
+      "projectId":'',
+      "patternSpotName":'',
+      "patternSpotGeo":'',
+      "describes":'',
+      "tskClaId":''
+  }).then((response) => {
+
+
+  }).catch((e) => {
+      //message.warning('提交数据失败,请稍后再试');
+  });
+  }
 
   render() {
     const { getFieldProps } = this.props.form;
@@ -87,24 +105,24 @@ class DataCollect extends Component {
           title="备注信息"
           placeholder="请输入备注信息"
         ></TextareaItem>
-        <Picker
-          data={types}
-          cols={1}
-          {...getFieldProps("district3")}
-          className="forss"
+        <InputItem
+          {...getFieldProps("autofocus")}
+          clear
+          placeholder="请输入数据类型"
+          ref={el => (this.autoFocusInst = el)}
         >
-          <List.Item arrow="horizontal">数据类型</List.Item>
-        </Picker>
-        <div class="am-list-item am-input-item am-list-item-middle">
-          <div class="am-list-line">
-            <div class="am-input-label am-input-label-5">添加照片</div>
-            <div class="am-input-control">
+          数据类型
+        </InputItem>
+        <div className="am-list-item am-input-item am-list-item-middle">
+          <div className="am-list-line">
+            <div className="am-input-label am-input-label-5">添加照片</div>
+            <div className="am-input-control">
                 <img src={photopng}></img>
             </div>
           </div>
         </div>
         <Button
-          className="taskroad-btn"
+          className="taskroad-btn"  onClick={this.submit}
         >
           提交
         </Button>

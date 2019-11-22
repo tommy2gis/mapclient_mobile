@@ -21,10 +21,10 @@
     "layers": [
       {
         "url": [
-          "http://t0.tianditu.com/vec_c/wmts",
-          "http://t1.tianditu.com/vec_c/wmts",
-          "http://t2.tianditu.com/vec_c/wmts",
-          "http://t3.tianditu.com/vec_c/wmts"
+          "http://t0.tianditu.gov.cn/vec_c/wmts",
+          "http://t1.tianditu.gov.cn/vec_c/wmts",
+          "http://t2.tianditu.gov.cn/vec_c/wmts",
+          "http://t3.tianditu.gov.cn/vec_c/wmts"
         ],
         "type": "geotdtwmts",
         "name": "天地图道路",
@@ -38,14 +38,14 @@
         "layer": "vec",
         "style": "default",
         "format": "tiles",
-        "tilematrixSet": "c"
+        "tileMatrixSet": "c"
       },
       {
         "url": [
-          "http://t0.tianditu.com/cva_c/wmts",
-          "http://t1.tianditu.com/cva_c/wmts",
-          "http://t2.tianditu.com/cva_c/wmts",
-          "http://t3.tianditu.com/cva_c/wmts"
+          "http://t0.tianditu.gov.cn/cva_c/wmts",
+          "http://t1.tianditu.gov.cn/cva_c/wmts",
+          "http://t2.tianditu.gov.cn/cva_c/wmts",
+          "http://t3.tianditu.gov.cn/cva_c/wmts"
         ],
         "type": "geotdtwmts",
         "name": "天地图道路标注",
@@ -59,15 +59,15 @@
         "layer": "cva",
         "style": "default",
         "format": "tiles",
-        "tilematrixSet": "c"
+        "tileMatrixSet": "c"
       },
 
       {
         "url": [
-          "http://t0.tianditu.com/img_c/wmts",
-          "http://t1.tianditu.com/img_c/wmts",
-          "http://t2.tianditu.com/img_c/wmts",
-          "http://t3.tianditu.com/img_c/wmts"
+          "http://t0.tianditu.gov.cn/img_c/wmts",
+          "http://t1.tianditu.gov.cn/img_c/wmts",
+          "http://t2.tianditu.gov.cn/img_c/wmts",
+          "http://t3.tianditu.gov.cn/img_c/wmts"
         ],
         "type": "geotdtwmts",
         "name": "天地图影像",
@@ -81,14 +81,14 @@
         "layer": "img",
         "style": "default",
         "format": "tiles",
-        "tilematrixSet": "c"
+        "tileMatrixSet": "c"
       },
       {
         "url": [
-          "http://t0.tianditu.com/cia_c/wmts",
-          "http://t1.tianditu.com/cia_c/wmts",
-          "http://t2.tianditu.com/cia_c/wmts",
-          "http://t3.tianditu.com/cia_c/wmts"
+          "http://t0.tianditu.gov.cn/cia_c/wmts",
+          "http://t1.tianditu.gov.cn/cia_c/wmts",
+          "http://t2.tianditu.gov.cn/cia_c/wmts",
+          "http://t3.tianditu.gov.cn/cia_c/wmts"
         ],
         "type": "geotdtwmts",
         "name": "天地图影像标注",
@@ -102,88 +102,7 @@
         "layer": "cia",
         "style": "default",
         "format": "tiles",
-        "tilematrixSet": "c"
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/WMTSServer/wuxi_newvector",
-        "type": "geotdtwmts",
-        "name": "无锡矢量",
-        "visibility": true,
-        "minZoom":18,
-        "maxZoom":20,
-        "title": "天地图",
-        "autoload": false,
-        "group": "矢量",
-        "layer": "0",
-        "style": "default",
-        "format": "image/png",
-        "tilematrixSet": "jsvector"
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/WMTSServer/wuxi_newvectoranno",
-        "type": "geotdtwmts",
-        "name": "无锡标注",
-        "visibility": true,
-        "minZoom":18,
-        "maxZoom":20,
-        "title": "天地图",
-        "autoload": false,
-        "group": "矢量",
-        "layer": "0",
-        "style": "default",
-        "format": "image/png",
-        "tilematrixSet": "jsvector"
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/WMTSServer/wuxi_image",
-        "type": "geotdtwmts",
-        "name": "无锡影像",
-        "visibility": false,
-        "minZoom":18,
-        "maxZoom":20,
-        "title": "天地图",
-        "autoload": false,
-        "group": "影像",
-        "layer": "0",
-        "style": "default",
-        "format": "image/png",
-        "tilematrixSet": "jsvector"
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/WMTSServer/wuxi_imageanno",
-        "type": "geotdtwmts",
-        "name": "无锡影像标注",
-        "visibility": false,
-        "minZoom":18,
-        "maxZoom":20,
-        "title": "天地图",
-        "autoload": false,
-        "group": "影像",
-        "layer": "0",
-        "style": "default",
-        "format": "image/png",
-        "tilematrixSet": "jsvector"
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/MapServer/wuxi_chenguan/grid_road",
-        "type": "ersidylayer",
-        "name": "无锡城管网格",
-        "layers":[],
-        "visibility": false,
-        "opacity":0.8,
-        "f":"image",
-        "layerDefs":{ "4": "网格类型=''"},
-        "useCors": true
-      },
-      {
-        "url": "http://61.177.139.228:9000/gateway/MapServer/wuxi_chenguan/poi",
-        "type": "ersidylayer",
-        "name": "无锡城管POI",
-        "layers":[],
-        "visibility": false,
-        "opacity":0.8,
-        "f":"image",
-        "useCors": true
+        "tileMatrixSet": "c"
       }
       
     ]

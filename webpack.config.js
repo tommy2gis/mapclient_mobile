@@ -24,7 +24,8 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     inline: true,
-    contentBase: "./build",
+    disableHostCheck:true,
+    contentBase: "./public",
     port: 8080,
     proxy: {
             "/mobile/*": {

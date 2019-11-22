@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:32 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-21 17:46:35
+ * @Last Modified time: 2019-11-22 21:59:42
  */
 
 const FEATURE_TYPE_LOADED = 'FEATURE_TYPE_LOADED';
@@ -23,6 +23,7 @@ const QUERY_TASKS_RESULT='QUERY_TASKS_RESULT';
 const SELECT_TASK='SELECT_TASK';
 const SELECT_PATTEN='SELECT_PATTEN';
 const QUERY_PATTENS_RESULT='QUERY_PATTENS_RESULT';
+const GET_USERLOCATION='GET_USERLOCATION';
 const LOGIN='LOGIN';
 const axios = require('axios');
 import { message } from 'antd';
@@ -38,7 +39,7 @@ function loginResponse(userinfo) {
 
 function login(userName,passWord) {
     return (dispatch,getState) => {
-        return axios.get(ServerUrl + "/mobile/acquisition/usermanagement/login",{
+        return axios.get(ServerUrl + "/acquisition/usermanagement/login",{
             params: {
                 "userName":userName,
                 "passWord": passWord
@@ -64,6 +65,13 @@ function featureTypeLoaded(typeName, featureType) {
         type: FEATURE_TYPE_LOADED,
         typeName,
         featureType
+    };
+}
+
+function getUserLocation(loc) {
+    return {
+        type: GET_USERLOCATION,
+        loc
     };
 }
 
@@ -350,7 +358,7 @@ function queryPattens(pageindex,size) {
 
     return (dispatch, getState) => {
         const query = getState().query;
-        return axios.get(ServerUrl+'/mobile/acquisition/datamanagement/pagelist', {
+        return axios.get(ServerUrl+'/acquisition/datamanagement/pagelist', {
             params: {
                 userId: 25,
                 ptnSptId:'dd5ba539d85d42b18536ee1f9cc709f1',
@@ -387,7 +395,7 @@ function queryTasks(pageindex,size) {
 
     return (dispatch, getState) => {
         const query = getState().query;
-        return axios.get(ServerUrl+'/mobile/acquisition/taskinformation/pagelist', {
+        return axios.get(ServerUrl+'/acquisition/taskinformation/pagelist', {
             params: {
                 userId: 5,
                 size: size||query.page,
@@ -437,6 +445,8 @@ module.exports = {
     query,
     login,
     LOGIN,
+    getUserLocation,
+    GET_USERLOCATION,
     queryTasks,
     resetQuery
 };

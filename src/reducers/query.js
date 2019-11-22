@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:31:12 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-21 17:48:18
+ * @Last Modified time: 2019-11-22 16:47:57
  */
 
 const {
@@ -20,6 +20,7 @@ const {
     QUERY_PATTENS_RESULT,
     SELECT_PATTEN,
     RESET_QUERY,
+    GET_USERLOCATION,
     LOGIN
 } = require('../actions/query');
 
@@ -42,6 +43,7 @@ const initialState = {
     simpleresult: '',
     tasksresult:null,
     hoverid: null,
+    curloc:null,
     selectedid: null,
     resultError: null
 };
@@ -51,6 +53,13 @@ function query(state = initialState, action) {
         case QUERY_RESULT: {
             return assign({}, state, {
                 result: action.result,
+                resultError: null
+            });
+        }
+
+        case GET_USERLOCATION: {
+            return assign({}, state, {
+                curloc: action.loc,
                 resultError: null
             });
         }
