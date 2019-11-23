@@ -11,6 +11,7 @@ import {
   InputItem
 } from "antd-mobile";
 import { changeModel } from "../../actions/map";
+import { changeDrawingStatus } from "../../actions/draw";
 import { createForm } from "rc-form";
 import photopng from "./assets/photo.png";
 const types = [
@@ -24,6 +25,13 @@ class DataCollect extends Component {
   _onDataClick = () => {
     this.props.history.push("/");
     this.props.changeModel("dataedit");
+    this.props.changeDrawingStatus(
+      "start",
+      "Point",
+      "error",
+      [],
+      {}
+    );
   };
   submit = (e) => {
     e.preventDefault();
@@ -161,6 +169,7 @@ export default connect(
     return {};
   },
   {
-    changeModel
+    changeModel,
+    changeDrawingStatus
   }
 )(createForm()(DataCollect));

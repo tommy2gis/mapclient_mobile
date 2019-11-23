@@ -17,7 +17,7 @@ import {changeDrawingStatus} from '../../actions/draw';
    static propTypes = {
      prop: PropTypes
    };
-   state = { selectdraw: "绘点" };
+   state = { selectdraw: "" };
    _handleToolarClick = name => {
      switch (name) {
        case "绘点":
@@ -26,7 +26,12 @@ import {changeDrawingStatus} from '../../actions/draw';
            "Point",
            "error",
            [],
-           {}
+           {},
+           {
+            iconGlyph: 'jiucuoguanli',
+            iconColor: 'cyan',
+            iconPrefix: 'icon'
+        }
          );
          break;
        case "绘线":
