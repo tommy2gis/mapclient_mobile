@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+const axios = require('axios');
+import { connect } from "react-redux";
 import {
   Button,
   TextareaItem,
@@ -19,25 +21,28 @@ const types = [
 ];
 
 class TaskCollect extends Component {
+  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111" };
   submit = (e) => {
-    e.preventDefault();
+    const {selecttask}=this.props.query;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         axios
           .post(ServerUrl + "/acquisition/dataInformation/save", {
-            usrId: userName,
+            usrId: 5,
             name: values.name,
-            geo: "",
+            geo: selecttask.patternGeo,
             content: values.content,
             state: 0,
             type: values.type,
-            tskId: "",
-            fileTemporaryNames: "",
-            fileNames: ""
+            tskId: selecttask.id,
+            fileNames: serverId+".jpg",
+            mediaIds: this.state.serverId
           })
-          .then(response => {})
+          .then(response => {
+            Toast.info(response,1);
+          })
           .catch(e => {
-            //message.warning('提交数据失败,请稍后再试');
+            Toast.info('提交数据失败,请稍后再试',1);
           });
       } else {
         for (const key in err) {
@@ -49,43 +54,28 @@ class TaskCollect extends Component {
     });
   };
 
-  uploadPhotos = images => {
-    if (images.localId.length == 0) {
-      return;
-    }
-    var i = 0,
-      length = images.localId.length;
-    images.serverId = [];
-    function upload() {
-      wx.uploadImage({
-        localId: images.localId[i],
-        isShowProgressTips: 1,
-        success: function(res) {
-          i++;
-          //alert('已上传：' + i + '/' + length);
-          images.serverId.push(res.serverId);
-          if (i < length) {
-            upload();
-          }
-        },
-        fail: function(res) {
-          alert(JSON.stringify(res));
-        }
-      });
-    }
-    upload();
-  };
 
-  getPhoto = () => {
-    var images = {
-      localId: [],
-      serverId: []
-    };
+
+  uploadimg = () => {
     wx.chooseImage({
+      count: 1, // 默认9
+      sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
       success: res => {
-        images.localId = res.localIds;
-        this.uploadPhotos(images);
-        alert("已选择 " + res.localIds.length + " 张图片");
+        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+        wx.uploadImage({
+          localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: res => {
+            //var mediaId = res.serverId; // 返回图片的服务器端ID，即mediaId
+            //"1237378768e7q8e7r8qwesafdasdfasdfaxss111"
+            this.setState({ serverId: res.serverId });
+            Toast.info("图片上传成功", 1);
+          },
+          fail: function(res) {
+            Toast.info("上传图片失败，请重试", 1);
+          }
+        });
       }
     });
   };
@@ -140,7 +130,7 @@ class TaskCollect extends Component {
             <div className="am-input-label am-input-label-5">
               添加照片<span style={{ color: "red" }}>*</span>
             </div>
-            <div className="am-input-control" onClick={this.getPhoto}>
+            <div className="am-input-control" onClick={this.uploadimg}>
               <img src={photopng}></img>
             </div>
           </div>
@@ -153,4 +143,13 @@ class TaskCollect extends Component {
   }
 }
 
-export default createForm()(TaskCollect);
+export default connect(
+  state => {
+    return {
+      query: state.query
+    };
+  },
+  {
+    
+  }
+)(createForm()(TaskCollect));

@@ -39,7 +39,7 @@ import {changeLayerVisiable} from '../../actions/config'
             renderItem={dataItem => (
               <div style={{ padding: "12.5px" }} onClick={()=>this._onClick(dataItem.name)}>
                 <img
-                  className={(this.state.model==dataItem.name)&&'imgselected'}
+                  className={(this.state.model==dataItem.name)?'imgselected':undefined}
                   src={dataItem.img}
                   style={{  height: "75px" }}
                   alt=""

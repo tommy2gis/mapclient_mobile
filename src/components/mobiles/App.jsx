@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 import LayerSwitch from "../mobiles/LayerSwitch";
 import TaskDetail from "../mobiles/TaskDetail";
 import DataEdit from "../mobiles/DataEdit";
+import MapCenterCoord from '../map/MapCenterCoord';
 import "leaflet/dist/leaflet.css";
 import "./style.less";
 import "../../themes/iconfont/iconfont.css";
@@ -39,16 +40,47 @@ class App extends React.Component {
     axios
       .get(ServerUrl + "/wx/config", {
         params: {
-          url: window.location.href
+          url: window.location.href.split('#')[0]
         }
       })
       .then(res => {
-        wx.config(res.data);
-        wx.ready(res => {
-          console.log("wx.ready", res);
+        let config=res.data.data;
+       // alert(JSON.stringify(config));
+       // alert(JSON.stringify(window.location.href.split('#')[0]))
+        wx.config({ debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: config.appId, // 必填，公众号的唯一标识
+          timestamp: config.timestamp, // 必填，生成签名的时间戳
+          nonceStr: config.nonceStr, // 必填，生成签名的随机串
+          signature: config.signature,// 必填，签名，见附录1
+          jsApiList: ["chooseImage",
+          "previewImage",
+          "uploadImage",
+          "downloadImage",
+          "translateVoice",
+          "getNetworkType",
+          "openLocation",
+          "getLocation",
+          "hideOptionMenu",
+          "showOptionMenu",
+          "hideMenuItems",
+          "showMenuItems",
+          "hideAllNonBaseMenuItem",
+          "showAllNonBaseMenuItem"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2});
+        });
+          wx.ready(res => {
+         // alert("wx.ready")
+          wx.getLocation({
+            success: res => {
+              this.props.getUserLocation(res);
+            },
+            cancel: function(res) {
+              Toast.info("用户拒绝授权获取地理位置", 1);
+            }
+          });
         });
         wx.error(err => {
-          console.log(err.errMsg);
+         // alert(JSON.stringify(err))
+          Toast.info(JSON.stringify(err), 1);
         });
       })
       .catch(e => {});
@@ -86,7 +118,7 @@ class App extends React.Component {
 
   showLayerChangeControl = () => {
     const model =
-      !this.props.map.model || this.props.map.model == "main"
+      (!this.props.map.model || this.props.map.model == "main")
         ? "layerswitch"
         : "main";
     this.props.changeModel(model);
@@ -317,10 +349,10 @@ class App extends React.Component {
             </NavLink>
           )}
 
+          <div  className={"clientmap " + (model != "main" ? " bottommodel":"")}>
           <LMap
             id="map"
             ref="map"
-            className={"clientmap " + (model != "main" && " bottommodel")}
             contextmenu={false}
             zoom={map.zoom}
             center={map.center}
@@ -329,7 +361,7 @@ class App extends React.Component {
             projection={map.projection}
           >
             {this.renderLayers(mapConfig.layers)}
-
+            {model == "dataedit"&&<MapCenterCoord/>} 
             <ZoomControl />
             <DrawSupport
               drawStatus={draw.drawStatus}
@@ -340,6 +372,9 @@ class App extends React.Component {
               features={draw.features}
             />
           </LMap>
+          </div>
+
+          
           <div className="bottom-container">
             {model == "layerswitch" && <LayerSwitch></LayerSwitch>}
             {model == "taskdetail" && (

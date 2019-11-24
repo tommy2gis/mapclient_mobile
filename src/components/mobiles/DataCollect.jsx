@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import wx from "weixin-js-sdk";
 import {
   Button,
   TextareaItem,
@@ -22,22 +23,18 @@ const types = [
 ];
 
 class DataCollect extends Component {
+  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111" };
   _onDataClick = () => {
     this.props.history.push("/");
     this.props.changeModel("dataedit");
-    this.props.changeDrawingStatus(
-      "start",
-      "Point",
-      "error",
-      [],
-      {}
-    );
+    this.props.changeDrawingStatus("start", "Point", "error", [], {});
   };
-  submit = (e) => {
+  submit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        axios.post(ServerUrl + "/acquisition/dataInformation/save", {
+        axios
+          .post(ServerUrl + "/acquisition/dataInformation/save", {
             usrId: userName,
             name: values.name,
             geo: "",
@@ -60,6 +57,29 @@ class DataCollect extends Component {
           Toast.info(el.errors[0].message, 1);
           return;
         }
+      }
+    });
+  };
+  uploadimg = () => {
+    wx.chooseImage({
+      count: 1, // 默认9
+      sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+      success: res => {
+        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+        wx.uploadImage({
+          localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: res => {
+            //var mediaId = res.serverId; // 返回图片的服务器端ID，即mediaId
+            //"1237378768e7q8e7r8qwesafdasdfasdfaxss111"
+            this.setState({ serverId: res.serverId });
+            Toast.info("图片上传成功", 1);
+          },
+          fail: function(res) {
+            Toast.info("上传图片失败，请重试", 1);
+          }
+        });
       }
     });
   };
@@ -88,7 +108,9 @@ class DataCollect extends Component {
           })}
           className="forss"
         >
-          <List.Item arrow="horizontal">城市名称<span style={{ color: "red" }}>*</span></List.Item>
+          <List.Item arrow="horizontal">
+            城市名称<span style={{ color: "red" }}>*</span>
+          </List.Item>
         </Picker>
         <Picker
           data={types}
@@ -98,7 +120,9 @@ class DataCollect extends Component {
           })}
           className="forss"
         >
-          <List.Item arrow="horizontal">县级名称<span style={{ color: "red" }}>*</span></List.Item>
+          <List.Item arrow="horizontal">
+            县级名称<span style={{ color: "red" }}>*</span>
+          </List.Item>
         </Picker>
         <Picker
           data={types}
@@ -108,7 +132,9 @@ class DataCollect extends Component {
           })}
           className="forss"
         >
-          <List.Item arrow="horizontal">项目名称<span style={{ color: "red" }}>*</span></List.Item>
+          <List.Item arrow="horizontal">
+            项目名称<span style={{ color: "red" }}>*</span>
+          </List.Item>
         </Picker>
         <InputItem
           {...getFieldProps("patternSpotName", {
@@ -135,9 +161,11 @@ class DataCollect extends Component {
             rules: [{ required: true, message: "请输入备注信息!" }]
           })}
           rows={3}
-          title={<div>
-            备注信息<span style={{ color: "red" }}>*</span>
-          </div>}
+          title={
+            <div>
+              备注信息<span style={{ color: "red" }}>*</span>
+            </div>
+          }
           placeholder="请输入备注信息"
         ></TextareaItem>
         <InputItem
@@ -152,7 +180,7 @@ class DataCollect extends Component {
           <div className="am-list-line">
             <div className="am-input-label am-input-label-5">添加照片</div>
             <div className="am-input-control">
-              <img src={photopng}></img>
+              <img src={photopng} onClick={this.uploadimg}></img>
             </div>
           </div>
         </div>

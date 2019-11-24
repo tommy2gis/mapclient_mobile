@@ -24,7 +24,7 @@ import {changeDrawingStatus} from '../../actions/draw';
          this.props.changeDrawingStatus(
            "start",
            "Point",
-           "error",
+           "draw",
            [],
            {},
            {
@@ -38,7 +38,7 @@ import {changeDrawingStatus} from '../../actions/draw';
          this.props.changeDrawingStatus(
            "start",
            "LineString",
-           "error",
+           "draw",
            [],
            {}
          );
@@ -47,11 +47,12 @@ import {changeDrawingStatus} from '../../actions/draw';
          this.props.changeDrawingStatus(
            "start",
            "Polygon",
-           "error",
+           "draw",
            [],
            {}
          );
          break;
+         
        default:
          break;
      }
@@ -69,20 +70,22 @@ import {changeDrawingStatus} from '../../actions/draw';
        { name: "返回", img: fanhui },
        { name: "删除", img: shanchu }
      ];
+
+     
      return (
        <Card>
          <Card.Header
            title={
              <Flex>
-               <Flex.Item>
+               <Flex.Item onClick={()=>this.props.changeDrawingStatus("addCenterPoint","","draw",[],{})}>
                  <img src={pmzd} style={{ height: 16 }} alt="" />
                  <span>屏幕中点</span>
                </Flex.Item>
-               <Flex.Item>
+               <Flex.Item onClick={()=>this.props.changeDrawingStatus("back","","draw",[],{})}>
                  <img src={fanhui} style={{ height: 16 }} alt="" />
                  <span>返回</span>
                </Flex.Item>
-               <Flex.Item>
+               <Flex.Item onClick={()=>this.props.changeDrawingStatus("clean","","draw",[],{})}>
                  <img src={shanchu} style={{ height: 16 }} alt="" />
                  <span>删除</span>
                </Flex.Item>
