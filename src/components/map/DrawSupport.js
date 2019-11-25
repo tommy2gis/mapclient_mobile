@@ -2,7 +2,7 @@
  * @Author: 史涛 
  * @Date: 2019-01-05 19:33:45 
  * @Last Modified by: 史涛
- * @Last Modified time: 2019-11-24 22:23:30
+ * @Last Modified time: 2019-11-25 15:14:13
  */
 
 const PropTypes = require('prop-types');
@@ -12,6 +12,11 @@ const L = require('leaflet');
 
 require('leaflet-draw');
 require('leaflet-draw/dist/leaflet.draw.css');
+
+import '@geoman-io/leaflet-geoman-free';
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+
+
 
 // var originalOnTouch = L.Draw.Polyline.prototype._onTouch;
 // 	L.Draw.Polyline.prototype._onTouch = function( e ) {
@@ -180,7 +185,7 @@ class DrawSupport extends React.Component {
                     this.removeAllInteractions();
                 } break;
                 case "replace": this.replaceFeatures(newProps); break;
-                case "clean": this.cleanAndStop(); break;
+                case "clean": this.cleanAndStop(newProps); break;
                 case "endDrawing": this.endDrawing(newProps); break;
                 case "back": this.backDrawing(newProps); break;
                 case "addCenterPoint": this.addCenterPoint(newProps); break;
@@ -200,7 +205,7 @@ class DrawSupport extends React.Component {
         // let drawn geom stay on the map
         let geoJesonFt = layer.toGeoJSON();
         let bounds;
-        if (evt.layerType === "marker") {
+        if (evt.shape === "CircleMarker") {
             bounds = L.latLngBounds(geoJesonFt.geometry.coordinates, geoJesonFt.geometry.coordinates);
         } else {
             if (!layer._map) {
@@ -353,23 +358,24 @@ class DrawSupport extends React.Component {
     };
 
     backDrawing=(newProps) => {
-        if (newProps.drawMethod === "Point" || newProps.drawMethod === "") {
+        if (newProps.drawMethod === "CircleMarker") {
 
         } else {
-            if (this.drawControl !== null && this.drawControl !== undefined) {
-                this.drawControl.deleteLastVertex();
-            }
+
+            newProps.map.pm.Draw[newProps.drawMethod]._removeLastVertex();
         }
 
     };
 
     addCenterPoint=(newProps) => {
-        if (newProps.drawMethod === "Point" || newProps.drawMethod === "") {
+        if (newProps.drawMethod === "CircleMarker") {
 
         } else  {
-            if (this.drawControl !== null && this.drawControl !== undefined) {
-                this.drawControl.addVertex(this.props.map.getCenter());
-            }
+            let control=newProps.map.pm.Draw[newProps.drawMethod];
+            const first = control._layer.getLatLngs().length === 0;
+            const center=this.props.map.getCenter();
+            control._layer.addLatLng(center);
+            control._createMarker(center, first);
         }
 
     };
@@ -386,101 +392,108 @@ class DrawSupport extends React.Component {
         } else {
             this.addLayer(newProps);
         }
-        this.props.map.on('draw:created', this.onDrawCreated, this);
-        this.props.map.on('draw:drawstart', this.onDrawStart, this);
+        this.props.map.on('pm:create', this.onDrawCreated, this);
+        this.props.map.on('pm:drawstart', this.onDrawStart, this);
 
-        if (newProps.drawMethod === 'LineString' || newProps.drawMethod === 'Bearing' || newProps.drawMethod === 'MultiLineString') {
-            this.drawControl = new L.Draw.Polyline(this.props.map, {
-                shapeOptions: {
-                    color: '#ffcc33',
-                    opacity: 1,
-                    weight: 3,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.2,
-                },
-                showLength: false,
-                repeatMode: true,
-                icon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon'
-                }),
-                touchIcon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
-                })
-            });
+        if (newProps.drawMethod === 'LineString' || newProps.drawMethod === 'Line' || newProps.drawMethod === 'MultiLineString') {
+            // this.drawControl = new L.Draw.Polyline(this.props.map, {
+            //     shapeOptions: {
+            //         color: '#ffcc33',
+            //         opacity: 1,
+            //         weight: 3,
+            //         fillColor: '#ffffff',
+            //         fillOpacity: 0.2,
+            //     },
+            //     showLength: false,
+            //     repeatMode: true,
+            //     icon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon'
+            //     }),
+            //     touchIcon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
+            //     })
+            // });
+            this.props.map.pm.enableDraw('Line', { finishOn: 'dblclick' });
         } else if (newProps.drawMethod === 'Polygon' || newProps.drawMethod === 'MultiPolygon') {
-            this.drawControl = new L.Draw.Polygon(this.props.map, {
-                shapeOptions: {
-                    color: '#000000',
-                    weight: 2,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.2,
-                    dashArray: [5, 5],
-                    guidelineDistance: 5
-                },
-                allowIntersection: false,
-                showLength: false,
-                showArea: false,
-                repeatMode: true,
-                icon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon'
-                }),
-                touchIcon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
-                })
-            });
+            // this.drawControl = new L.Draw.Polygon(this.props.map, {
+            //     shapeOptions: {
+            //         color: '#000000',
+            //         weight: 2,
+            //         fillColor: '#ffffff',
+            //         fillOpacity: 0.2,
+            //         dashArray: [5, 5],
+            //         guidelineDistance: 5
+            //     },
+            //     allowIntersection: false,
+            //     showLength: false,
+            //     showArea: false,
+            //     repeatMode: true,
+            //     icon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon'
+            //     }),
+            //     touchIcon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
+            //     })
+            // });
+            this.props.map.pm.enableDraw('Polygon', { finishOn: 'dblclick' });
         } else if (newProps.drawMethod === 'BBOX') {
-            this.drawControl = new L.Draw.Rectangle(this.props.map, {
-                draw: false,
-                shapeOptions: {
-                    color: '#000000',
-                    weight: 2,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.2,
-                    dashArray: [5, 5]
-                },
-                repeatMode: true,
-                icon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon'
-                }),
-                touchIcon: new L.DivIcon({
-                    iconSize: new L.Point(8, 8),
-                    className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
-                })
-            });
+            
+            this.props.map.pm.enableDraw('Rectangle');
+            // this.drawControl = new L.Draw.Rectangle(this.props.map, {
+            //     draw: false,
+            //     shapeOptions: {
+            //         color: '#000000',
+            //         weight: 2,
+            //         fillColor: '#ffffff',
+            //         fillOpacity: 0.2,
+            //         dashArray: [5, 5]
+            //     },
+            //     repeatMode: true,
+            //     icon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon'
+            //     }),
+            //     touchIcon: new L.DivIcon({
+            //         iconSize: new L.Point(8, 8),
+            //         className: 'leaflet-div-icon leaflet-editing-icon leaflet-touch-icon'
+            //     })
+            // });
         } else if (newProps.drawMethod === 'Circle') {
-            this.drawControl = new L.Draw.Circle(this.props.map, {
-                shapeOptions: {
-                    color: '#000000',
-                    weight: 2,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.2,
-                    dashArray: [5, 5]
-                },
-                repeatMode: true
-            });
-        } else if (newProps.drawMethod === 'Point' || newProps.drawMethod === 'MultiPoint') {
-            this.drawControl = new L.Draw.CircleMarker(this.props.map, {
-                shapeOptions: {
-                    color: '#000000',
-                    weight: 2,
-                    fillColor: '#ffffff',
-                    fillOpacity: 0.2
-                },
-                icon: VectorUtils.getIcon(newProps.style)|| new L.Icon.Default(),
-                repeatMode: true
-            });
+            this.props.map.pm.enableDraw('Circle');
+            // this.drawControl = new L.Draw.Circle(this.props.map, {
+            //     shapeOptions: {
+            //         color: '#000000',
+            //         weight: 2,
+            //         fillColor: '#ffffff',
+            //         fillOpacity: 0.2,
+            //         dashArray: [5, 5]
+            //     },
+            //     repeatMode: true
+            // });
+        } else if (newProps.drawMethod === 'Point' || newProps.drawMethod === 'CircleMarker') {
+            
+            this.props.map.pm.enableDraw('CircleMarker');
+            // this.drawControl = new L.Draw.CircleMarker(this.props.map, {
+            //     shapeOptions: {
+            //         color: '#000000',
+            //         weight: 2,
+            //         fillColor: '#ffffff',
+            //         fillOpacity: 0.2
+            //     },
+            //     icon: VectorUtils.getIcon(newProps.style)|| new L.Icon.Default(),
+            //     repeatMode: true
+            // });
         }
 
         // start the draw control
         if (this.props.map.doubleClickZoom) {
             this.props.map.doubleClickZoom.disable();
         }
-        this.drawControl.enable();
+        //this.drawControl.enable();
     };
 
     addDrawOrEditInteractions = (newProps) => {
@@ -582,33 +595,16 @@ class DrawSupport extends React.Component {
     }
 
     removeDrawInteraction = () => {
-        if (this.drawControl !== null && this.drawControl !== undefined) {
-            // Needed if missing disable() isn't warking
-            if (this.props.options && this.props.options.stopAfterDrawing) {
-                this.drawControl.setOptions({ repeatMode: false });
-                this.props.onDrawStopped();
-            }
-            this.drawControl.disable();
-            this.drawControl = null;
-            this.props.map.off('draw:created', this.onDrawCreated, this);
-            this.props.map.off('draw:drawstart', this.onDrawStart, this);
-            if (this.props.map.doubleClickZoom) {
-                this.props.map.doubleClickZoom.enable();
-            }
+        this.props.map.off('pm:create', this.onDrawCreated, this);
+        this.props.map.off('pm:drawstart', this.onDrawStart, this);
+        if (this.props.map.doubleClickZoom) {
+            this.props.map.doubleClickZoom.enable();
         }
     };
 
     removeEditInteraction = () => {
-        if (this.drawLayer) {
-            let allLayers = this.drawLayer.getLayers();
-            allLayers.forEach(l => {
-                l.off('edit');
-                l.off('moveend');
-                if (l.editing) {
-                    l.editing.disable();
-                }
-            });
-            this.editControl = null;
+        if (this.props.map.pm) {
+            this.props.map.pm.disableGlobalEditMode();
         }
         if (this.props.map.doubleClickZoom) {
             this.props.map.doubleClickZoom.enable();
@@ -616,13 +612,17 @@ class DrawSupport extends React.Component {
     };
 
     cleanAndStop = () => {
-        this.removeAllInteractions();
+        let layers=this.props.map.pm.findLayers();
+        layers.forEach(layer => {
+            layer.remove();
+        });
+         this.removeAllInteractions();
 
-        if (this.drawLayer) {
-            this.drawLayer.clearLayers();
-            this.props.map.removeLayer(this.drawLayer);
-            this.drawLayer = null;
-        }
+        // if (this.drawLayer) {
+        //     this.drawLayer.clearLayers();
+        //     this.props.map.removeLayer(this.drawLayer);
+        //     this.drawLayer = null;
+        // }
     };
 
     clean = () => {

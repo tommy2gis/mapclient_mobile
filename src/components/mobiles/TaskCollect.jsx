@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+var L = require("leaflet");
 import PropTypes from "prop-types";
-const axios = require('axios');
+import {stringify} from 'wellknown';
+const axios = require("axios");
 import { connect } from "react-redux";
 import {
   Button,
@@ -20,10 +22,15 @@ const types = [
   }
 ];
 
+let polyline = L.polyline([]);
+let interval=null;
+
 class TaskCollect extends Component {
-  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111" };
-  submit = (e) => {
-    const {selecttask}=this.props.query;
+  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111", polyline: null };
+  submit = e => {
+    Toast.loading('提交中', 10);
+    this.uploadtracks();
+    const { selecttask } = this.props.query;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         axios
@@ -33,16 +40,17 @@ class TaskCollect extends Component {
             geo: selecttask.patternGeo,
             content: values.content,
             state: 0,
-            type: values.type,
+            type: values.type||'',
             tskId: selecttask.id,
-            fileNames: serverId+".jpg",
+            fileNames: this.state.serverId + ".jpg",
             mediaIds: this.state.serverId
           })
           .then(response => {
-            Toast.info(response,1);
+            Toast.info(response.data.data, 1);
+            Toast.hide();
           })
           .catch(e => {
-            Toast.info('提交数据失败,请稍后再试',1);
+            Toast.info("提交数据失败,请稍后再试", 1);
           });
       } else {
         for (const key in err) {
@@ -54,7 +62,43 @@ class TaskCollect extends Component {
     });
   };
 
+  collectTrasks = () => {
+    let getloc=()=>{
+      wx.getLocation({
+        success: res => {
+          polyline.addLatLng([res.latitude, res.longitude]);
+        },
+        cancel: function(res) {
+          Toast.info("用户拒绝授权获取地理位置", 1);
+        }
+      });
+    }
+    interval = setInterval(getloc, 10000);
+  };
 
+  uploadtracks = () => {
+    const geojsonpath=polyline.toGeoJSON();
+    const geo=stringify(geojsonpath);
+    const { pjtId, id } = this.props.query.selecttask;
+    clearInterval(interval);
+    axios
+      .get(ServerUrl + "/acquisition/usertrack/record", {
+        params: {
+          usrId: 5,
+          pjtId: pjtId,
+          tskId: id,
+          length: geojsonpath.geometry.coordinates.length,
+          geo: geo||""
+        }
+      })
+      .then(response => {
+        Toast.info(response.data.data);
+        
+      })
+      .catch(e => {
+        Toast.info("数据查询失败,请稍后再试");
+      });
+  };
 
   uploadimg = () => {
     wx.chooseImage({
@@ -79,6 +123,9 @@ class TaskCollect extends Component {
       }
     });
   };
+  componentDidMount(){
+    this.collectTrasks();
+  }
 
   render() {
     const { getFieldProps } = this.props.form;
@@ -143,13 +190,8 @@ class TaskCollect extends Component {
   }
 }
 
-export default connect(
-  state => {
-    return {
-      query: state.query
-    };
-  },
-  {
-    
-  }
-)(createForm()(TaskCollect));
+export default connect(state => {
+  return {
+    query: state.query
+  };
+}, {})(createForm()(TaskCollect));

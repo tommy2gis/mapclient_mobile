@@ -23,7 +23,7 @@ import {changeDrawingStatus} from '../../actions/draw';
        case "绘点":
          this.props.changeDrawingStatus(
            "start",
-           "Point",
+           "CircleMarker",
            "draw",
            [],
            {},
@@ -37,7 +37,7 @@ import {changeDrawingStatus} from '../../actions/draw';
        case "绘线":
          this.props.changeDrawingStatus(
            "start",
-           "LineString",
+           "Line",
            "draw",
            [],
            {}
@@ -77,11 +77,11 @@ import {changeDrawingStatus} from '../../actions/draw';
          <Card.Header
            title={
              <Flex>
-               <Flex.Item onClick={()=>this.props.changeDrawingStatus("addCenterPoint","","draw",[],{})}>
+               <Flex.Item onClick={()=>this.props.changeDrawingStatus("addCenterPoint",this.props.draw.drawMethod,"draw",[],{})}>
                  <img src={pmzd} style={{ height: 16 }} alt="" />
                  <span>屏幕中点</span>
                </Flex.Item>
-               <Flex.Item onClick={()=>this.props.changeDrawingStatus("back","","draw",[],{})}>
+               <Flex.Item onClick={()=>this.props.changeDrawingStatus("back",this.props.draw.drawMethod,"draw",[],{})}>
                  <img src={fanhui} style={{ height: 16 }} alt="" />
                  <span>返回</span>
                </Flex.Item>
@@ -128,7 +128,7 @@ import {changeDrawingStatus} from '../../actions/draw';
 
 export default connect(
   state => {
-    return {
+    return {draw:state.draw
     };
   },
   {

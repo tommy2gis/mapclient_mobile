@@ -31,7 +31,11 @@ class App extends React.Component {
     };
   }
 
+
+
   componentDidMount() {
+    const ele = document.getElementById("loading");
+    ele.style.display = "none";
     this.weixin();
     this.props.queryTasks();
   }

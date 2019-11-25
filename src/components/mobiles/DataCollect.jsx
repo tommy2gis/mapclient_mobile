@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+var L = require("leaflet");
+const axios = require("axios");
 import PropTypes from "prop-types";
+import {stringify} from 'wellknown';
 import wx from "weixin-js-sdk";
 import {
   Button,
@@ -22,32 +25,47 @@ const types = [
   }
 ];
 
+let polyline = L.polyline([]);
+let interval=null;
+
 class DataCollect extends Component {
-  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111" };
+  state = { serverId: "1237378768e7q8e7r8qwesafdasdfasdfaxss111", citys: [],getProjs:[] };
   _onDataClick = () => {
     this.props.history.push("/");
     this.props.changeModel("dataedit");
     this.props.changeDrawingStatus("start", "Point", "error", [], {});
   };
   submit = e => {
+    Toast.loading('提交中', 10);
+    const geojsonpath=polyline.toGeoJSON();
+    const geo=stringify(geojsonpath);
+    clearInterval(interval);
+
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      if(!this.props.draw.geometry){
+        Toast.info('图斑未绘制', 1);
+        return;
+      }
       if (!err) {
         axios
-          .post(ServerUrl + "/acquisition/dataInformation/save", {
-            usrId: userName,
+          .post(ServerUrl + "/acquisition/datamanagement/save/new", {
+            usrId: 5,
             name: values.name,
-            geo: "",
+            geo: "Point(0,0)",
             content: values.content,
             state: 0,
-            track: "",
-            trackLength: "",
-            projectId: values.projectId,
+            track: geo,
+            trackLength: geojsonpath.geometry.coordinates.length,
+            projectId: values.projectId[0],
             patternSpotName: values.patternSpotName,
-            patternSpotGeo: "",
-            tskClaId: values.tskClaId
+            patternSpotGeo: stringify(this.props.draw.geometry),
+            tskClaId: '375a12f315af42f482f6ae19b1b9444b'
           })
-          .then(response => {})
+          .then(response => {
+            Toast.info(response.data.data, 1);
+            Toast.hide();
+          })
           .catch(e => {
             //message.warning('提交数据失败,请稍后再试');
           });
@@ -60,6 +78,25 @@ class DataCollect extends Component {
       }
     });
   };
+
+  collectTrasks = () => {
+    let getloc=()=>{
+      wx.getLocation({
+        success: res => {
+          polyline.addLatLng([res.latitude, res.longitude]);
+        },
+        cancel: function(res) {
+          Toast.info("用户拒绝授权获取地理位置", 1);
+        }
+      });
+    }
+    interval = setInterval(getloc, 20000);
+  };
+
+  componentDidMount(){
+    this.collectTrasks();
+  }
+
   uploadimg = () => {
     wx.chooseImage({
       count: 1, // 默认9
@@ -84,6 +121,32 @@ class DataCollect extends Component {
     });
   };
 
+  componentDidMount() {
+    this.getCitys();
+    this.getProjs();
+  }
+  getCitys = () => {
+    axios
+      .get(ServerUrl + "/acquisition/regionmanagement/list")
+      .then(response => {
+        this.setState({ citys: response.data.data[0].children });
+      })
+      .catch(e => {
+        //Toast.info("数据查询失败,请稍后再试");
+      });
+  };
+
+  getProjs = () => {
+    axios
+      .get(ServerUrl + "/acquisition/projectmanagement/list?userId=5")
+      .then(response => {
+        this.setState({ getProjs: response.data.data.all });
+      })
+      .catch(e => {
+        //Toast.info("数据查询失败,请稍后再试");
+      });
+  };
+
   render() {
     const { getFieldProps } = this.props.form;
     return (
@@ -101,31 +164,21 @@ class DataCollect extends Component {
           数据采集
         </NavBar>
         <Picker
-          data={types}
-          cols={1}
+          data={this.state.citys}
+          key="id"
+          title="城市&区县"
+          cols={2}
           {...getFieldProps("city", {
-            rules: [{ required: true, message: "请选择城市名称!" }]
+            rules: [{ required: true, message: "请选择城市&区县名称!" }]
           })}
           className="forss"
         >
           <List.Item arrow="horizontal">
-            城市名称<span style={{ color: "red" }}>*</span>
+            城市&区县<span style={{ color: "red" }}>*</span>
           </List.Item>
         </Picker>
         <Picker
-          data={types}
-          cols={1}
-          {...getFieldProps("town", {
-            rules: [{ required: true, message: "请选择县级名称!" }]
-          })}
-          className="forss"
-        >
-          <List.Item arrow="horizontal">
-            县级名称<span style={{ color: "red" }}>*</span>
-          </List.Item>
-        </Picker>
-        <Picker
-          data={types}
+          data={this.state.getProjs}
           cols={1}
           {...getFieldProps("projectId", {
             rules: [{ required: true, message: "请输入项目名称!" }]
@@ -194,7 +247,7 @@ class DataCollect extends Component {
 
 export default connect(
   state => {
-    return {};
+    return {draw:state.draw};
   },
   {
     changeModel,

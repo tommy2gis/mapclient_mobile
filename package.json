@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@ansur/leaflet-pulse-icon": "^0.1.1",
+    "@geoman-io/leaflet-geoman-free": "^2.3.0",
     "@material-ui/core": "^1.4.0",
     "antd": "^3.11.2",
     "antd-mobile": "^2.3.1",
