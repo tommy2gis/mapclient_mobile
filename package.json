@@ -38,7 +38,7 @@
     "leaflet.sync": "^0.2.4",
     "less-vars-to-js": "^1.2.1",
     "lodash": "^4.17.10",
-    "moment": "^2.23.0",
+    "moment": "^2.29.2",
     "object-assign": "^4.1.1",
     "postcss-loader": "^2.1.6",
     "proj4": "^2.4.4",
